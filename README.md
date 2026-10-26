@@ -27,5 +27,5 @@ salidas/                  Inventarios, hallazgos, matriz y resumen ejecutivo
 
 ## Gestión del trabajo
 
-- Project: *pendiente de enlazar*
+- Project: [AC_C20_2026 – Auditoría Ágil](https://github.com/users/apachel-CL/projects/4)
 - Estimación por tallas y cálculo de velocidad: [docs/estimacion.md](docs/estimacion.md)
