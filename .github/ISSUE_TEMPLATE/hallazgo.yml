@@ -1,0 +1,69 @@
+name: Hallazgo
+description: Hallazgo de auditoría trazable (Observación → Evidencia → Hallazgo → Recomendación).
+title: "[H-XXX] "
+labels: ["hallazgo"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        No incluyas credenciales ni datos personales sin enmascarar: este repositorio es público.
+  - type: input
+    id: id
+    attributes:
+      label: ID del hallazgo
+      placeholder: H-001
+    validations:
+      required: true
+  - type: input
+    id: evidencia
+    attributes:
+      label: Evidencia
+      description: Una o más evidencias que sustentan el hallazgo.
+      placeholder: EV-002
+    validations:
+      required: true
+  - type: textarea
+    id: observacion
+    attributes:
+      label: Observación [HECHO]
+      description: Solo lo visible en la evidencia.
+    validations:
+      required: true
+  - type: textarea
+    id: hallazgo
+    attributes:
+      label: Hallazgo
+      description: Una frase, con justificación breve.
+    validations:
+      required: true
+  - type: dropdown
+    id: severidad
+    attributes:
+      label: Severidad
+      options:
+        - Crítica
+        - Alta
+        - Media
+        - Baja
+        - Informativa
+    validations:
+      required: true
+  - type: input
+    id: control
+    attributes:
+      label: Control ISO/IEC 27001:2022 (Anexo A)
+      placeholder: A.8.20
+    validations:
+      required: true
+  - type: textarea
+    id: legal
+    attributes:
+      label: Obligación legal chilena (si aplica)
+      description: Ley 21.663 / 21.719 / 21.459, con certeza Alta/Media/Baja. Si dudas, escribe "verificar".
+  - type: textarea
+    id: recomendacion
+    attributes:
+      label: Recomendación
+      description: Acción concreta, responsable sugerido y cómo validar el cierre.
+    validations:
+      required: true

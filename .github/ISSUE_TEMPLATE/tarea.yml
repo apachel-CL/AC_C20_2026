@@ -1,0 +1,38 @@
+name: Tarea
+description: Trabajo concreto que forma parte de una historia o épica.
+title: "[Tarea] "
+labels: ["tarea"]
+body:
+  - type: textarea
+    id: descripcion
+    attributes:
+      label: Descripción
+    validations:
+      required: true
+  - type: textarea
+    id: hecho
+    attributes:
+      label: Definición de hecho
+      description: Qué tiene que ser cierto para cerrar la tarea.
+      value: |
+        - [ ]
+    validations:
+      required: true
+  - type: dropdown
+    id: talla
+    attributes:
+      label: Talla (orientativa)
+      description: El valor oficial vive en el campo Talla del Project. Ver docs/estimacion.md.
+      options:
+        - XS (1)
+        - S (2)
+        - M (3)
+        - L (5)
+        - XL (8) — debe dividirse
+    validations:
+      required: true
+  - type: input
+    id: padre
+    attributes:
+      label: Historia o épica padre
+      placeholder: "#12"

@@ -1,0 +1,50 @@
+name: Historia de usuario
+description: Necesidad expresada como Como / quiero / para, con criterios de aceptación.
+title: "[HU] "
+labels: ["historia"]
+body:
+  - type: textarea
+    id: historia
+    attributes:
+      label: Historia
+      value: |
+        **Como** …
+        **quiero** …
+        **para** …
+    validations:
+      required: true
+  - type: textarea
+    id: criterios
+    attributes:
+      label: Criterios de aceptación
+      description: Deben ser verificables.
+      value: |
+        - [ ]
+        - [ ]
+    validations:
+      required: true
+  - type: dropdown
+    id: talla
+    attributes:
+      label: Talla (orientativa)
+      description: El valor oficial vive en el campo Talla del Project. Ver docs/estimacion.md.
+      options:
+        - XS (1)
+        - S (2)
+        - M (3)
+        - L (5)
+        - XL (8) — debe dividirse
+    validations:
+      required: true
+  - type: dropdown
+    id: epica
+    attributes:
+      label: Épica
+      options:
+        - E1 Alcance y gobierno
+        - E2 Evidencias
+        - E3 Análisis
+        - E4 Mapeo normativo
+        - E5 Informe y remediación
+    validations:
+      required: true
