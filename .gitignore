@@ -1,0 +1,26 @@
+# Configuración local de Claude Code
+.claude/settings.local.json
+
+# Archivos del sistema y temporales de Office
+Thumbs.db
+desktop.ini
+~$*
+*.tmp
+
+# Editor (se comparte solo settings.json si existe)
+.vscode/*
+!.vscode/settings.json
+
+# Credenciales y secretos
+.env
+.env.*
+*.pem
+*.key
+*.pfx
+*.p12
+*credentials*
+*secret*
+
+# Evidencias: pueden contener IPs, MAC y usuarios (repo público)
+evidencias/*
+!evidencias/.gitkeep
