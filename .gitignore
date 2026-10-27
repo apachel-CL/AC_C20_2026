@@ -22,5 +22,6 @@ desktop.ini
 *secret*
 
 # Evidencias: pueden contener IPs, MAC y usuarios (repo público)
-evidencias/*
-!evidencias/.gitkeep
+# Anclado a la raíz para no ignorar las evidencias ficticias de scripts/tests/fixtures/
+/evidencias/*
+!/evidencias/.gitkeep
