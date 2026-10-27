@@ -13,10 +13,19 @@ están en `contracts/`.
 | `id` | `EV-NNN` | Único y estable; coincide con el prefijo del archivo (FR-001) |
 | `archivo` | texto | `EV-NNN_<comando-o-tema>.<ext>` |
 | `observacion` | texto | Solo lo visible, etiquetado [HECHO]; sin credenciales (FR-003, FR-013) |
-| `clasificacion` | enum | `hallazgo` · `contexto` · `insuficiente` · `fuera-de-alcance` |
+| `clasificacion` | enum | `hallazgo` · `contexto` · `insuficiente` · `fuera-de-alcance` (ver correspondencia abajo) |
 | `debilidad` | texto | Obligatoria si `clasificacion = hallazgo` (FR-004) |
 | `falta` | texto | Obligatoria si `clasificacion = insuficiente` (FR-006) |
 | `reemplazada_por` | `EV-NNN` | Opcional, solo si es insuficiente: evidencia nueva que la completa (FR-017) |
+
+**Correspondencia de términos** entre la spec y los archivos:
+
+| Término en la spec | Valor en archivos |
+|---|---|
+| de hallazgo | `hallazgo` |
+| de contexto | `contexto` |
+| insuficiente | `insuficiente` |
+| fuera de alcance | `fuera-de-alcance` |
 
 **Transiciones**: sin clasificar → una de las cuatro clasificaciones. Una reclasificación solo
 ocurre en la revisión humana.

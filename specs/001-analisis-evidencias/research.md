@@ -55,7 +55,8 @@ documento registra las decisiones de diseño derivadas.
   - que un hallazgo cerrado tenga revisor y fecha;
   - patrones de credenciales sin enmascarar (como advertencia).
 
-  Termina con código 0 si todo pasa y 1 si hay errores, e imprime un reporte legible.
+  Termina con código 0 si todo pasa y 1 si hay errores, e imprime un reporte legible. La lista
+  completa y vigente de comprobaciones (C1–C14) está en `contracts/test-salidas.md`.
 - **Rationale**: cubre SC-001, SC-002, SC-005, SC-006 y SC-008 de forma repetible y sin red,
   como exige la constitución (IV).
 - **Alternatives considered**:

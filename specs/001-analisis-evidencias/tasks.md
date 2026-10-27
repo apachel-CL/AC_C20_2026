@@ -45,7 +45,7 @@ Estructura del repositorio según plan.md:
 **Purpose**: carpetas y ajustes de repositorio que necesitan todas las historias.
 
 - [ ] T001 Crear `docs/plantillas/`, `scripts/tests/fixtures/` y `salidas/hallazgos/.gitkeep`. En `.gitignore`, anclar la regla de evidencias a la raíz para que no ignore las de los fixtures: reemplazar `evidencias/*` por `/evidencias/*` y `!evidencias/.gitkeep` por `!/evidencias/.gitkeep`. Comprobar con `git check-ignore -v scripts/tests/fixtures/valido/evidencias/x.txt` (no debe aparecer como ignorado) [E2] [Talla: XS | 1 pts]
-- [ ] T002 [P] Agregar a la sección "Definition of Done" de `.github/pull_request_template.md` estos dos ítems: "- [ ] Bloque Revisión actualizado en cada H-NNN.md tocado (estado, revisor, fecha)" y "- [ ] `scripts/Test-Salidas.ps1` termina sin errores" (research R6, FR-014) [E3] [Talla: XS | 1 pts]
+- [ ] T002 [P] Agregar a la sección "Definition of Done" de `.github/pull_request_template.md` estos dos ítems: "- [ ] Bloque Revisión actualizado en cada H-NNN.md tocado (estado, revisor, fecha)" y "- [ ] `scripts/Test-Salidas.ps1` termina sin errores y sin `[AVISO]` C11 pendientes" (research R6, FR-014, SC-006) [E3] [Talla: XS | 1 pts]
 
 ---
 
@@ -68,6 +68,7 @@ las tres historias.
 - [ ] T004 [P] Crear `scripts/tests/Invoke-Pruebas.ps1`. Recorre cada subcarpeta de `scripts/tests/fixtures/` y ejecuta `Test-Salidas.ps1 -Ruta <fixture>/salidas -Evidencias <fixture>/evidencias`. El código esperado es 0 si el nombre empieza con `valido` o `aviso-`, y 1 si empieza con `invalido-`. Imprime una tabla fixture/esperado/obtenido y termina con 0 solo si todos coinciden (research R5) [E3] [Talla: S | 2 pts]
 - [ ] T005 [P] Actualizar el prompt de `docs/flujo_prompt_e_hu.md` §2a con todo lo siguiente:
   - nombres `EV-NNN_<comando-o-tema>.<ext>` y propuesta de renombre con confirmación (FR-001);
+  - la observación textual de lo visible, indicando la zona resaltada si la hay (FR-003);
   - las cuatro clasificaciones, con `fuera-de-alcance` evaluada primero, y el criterio de "debilidad concreta visible" (FR-004, Q1);
   - el uso de las plantillas de `docs/plantillas/`;
   - las 11 columnas de la matriz (FR-010);
@@ -102,7 +103,7 @@ procesar EV-002, `Test-Salidas.ps1` termina con 0 y se cumplen SC-001, SC-003 y 
 
 - [ ] T009 [US1] Implementar en `scripts/Test-Salidas.ps1` las comprobaciones C1–C3:
   - **C1:** IDs `^EV-\d{3}$` únicos.
-  - **C2:** si existe `-Evidencias`, cada archivo cumple `EV-NNN_*.*` y está inventariado; si no existe, `[AVISO]`.
+  - **C2:** si existe `-Evidencias`, cada archivo cumple `EV-NNN_*.*` y está inventariado, y no hay dos archivos con el mismo prefijo `EV-NNN` (error de conflicto, FR-001); si no existe, `[AVISO]`.
   - **C3:** clasificación válida y `Debilidad / Falta` no vacía para `hallazgo` e `insuficiente`.
 
   [E2] [Talla: M | 3 pts]
@@ -116,7 +117,7 @@ procesar EV-002, `Test-Salidas.ps1` termina con 0 y se cumplen SC-001, SC-003 y 
   - `evidencias/EV-002_ifconfig.txt`: un archivo de texto marcado "fixture ficticio".
 
   [E2] [Talla: S | 2 pts]
-- [ ] T012 [P] [US1] Crear cinco fixtures inválidos en `scripts/tests/fixtures/`, cada uno con una sola regla rota: `invalido-c1-id-duplicado/`, `invalido-c2-archivo-sin-inventariar/`, `invalido-c3-clasificacion-invalida/`, `invalido-c4-insuficiente-desalineada/` e `invalido-c5-fuente-inexistente/` [E2] [Talla: S | 2 pts]
+- [ ] T012 [P] [US1] Crear en `scripts/tests/fixtures/` seis fixtures inválidos, cada uno con una sola regla rota: `invalido-c1-id-duplicado/`, `invalido-c2-archivo-sin-inventariar/`, `invalido-c2-prefijo-duplicado/`, `invalido-c3-clasificacion-invalida/`, `invalido-c4-insuficiente-desalineada/` e `invalido-c5-fuente-inexistente/`. Crear además el fixture `valido-vacio/` (evidencias e inventarios vacíos: debe terminar con 0 e informar que no hay evidencias) [E2] [Talla: S | 2 pts]
 
 ### Ejecución del flujo en US1
 
@@ -147,7 +148,7 @@ estado `pendiente`, una fila en la matriz y el validador en 0 (SC-002, SC-005, S
 
 - [ ] T016 [US2] Implementar C6–C7 en `scripts/Test-Salidas.ps1`.
   - **C6:** el nombre `H-NNN.md` es igual al `ID`; los metadatos obligatorios están presentes; los enumerados `Severidad`, `Control ISO` y `Certeza ISO` son válidos.
-  - **C7:** cada EV citado existe en el inventario y al menos uno está clasificado `hallazgo`.
+  - **C7:** cada EV citado existe en el inventario, al menos uno está clasificado `hallazgo` y ninguno está clasificado `fuera-de-alcance` (FR-015).
 
   [E3] [Talla: M | 3 pts]
 - [ ] T017 [US2] Implementar C8–C9 en `scripts/Test-Salidas.ps1`.
@@ -162,11 +163,11 @@ estado `pendiente`, una fila en la matriz y el validador en 0 (SC-002, SC-005, S
   - `estado_revision` de la matriz debe ser igual al `Estado`.
 
   [E3] [Talla: S | 2 pts]
-- [ ] T019 [US2] Extender `scripts/tests/fixtures/valido/` con una evidencia ficticia `EV-900` clasificada `hallazgo` y un `H-001.md` ficticio en estado `aprobado` con revisor y fecha, más su fila en la matriz. Crear los fixtures `invalido-c6-enumerado/`, `invalido-c7-solo-contexto/`, `invalido-c8-encabezado/`, `invalido-c9-fila-huerfana/` e `invalido-c10-sin-fecha/` [E3] [Talla: M | 3 pts]
+- [ ] T019 [US2] Extender `scripts/tests/fixtures/valido/` con una evidencia ficticia `EV-900` clasificada `hallazgo` y un `H-001.md` ficticio en estado `aprobado` con revisor y fecha, más su fila en la matriz. Crear los fixtures `invalido-c6-enumerado/`, `invalido-c7-solo-contexto/`, `invalido-c7-cita-fuera-de-alcance/`, `invalido-c8-encabezado/`, `invalido-c9-fila-huerfana/` e `invalido-c10-sin-fecha/` [E3] [Talla: M | 3 pts]
 
 ### Ejecución del flujo en US2
 
-- [ ] T020 [US2] Procesar la primera evidencia que muestre una debilidad. Generar `salidas/hallazgos/H-001.md` desde la plantilla, con estado `pendiente`, y su fila en `salidas/matriz_hallazgos.csv`. Etiquetar [INFERENCIA] lo que no sea visible y comprobar que `Test-Salidas.ps1` termina con 0 [requiere evidencia del auditor: `evidencias/EV-NNN_<tema>.<ext>`] [E3] [Talla: M | 3 pts]
+- [ ] T020 [US2] Procesar la primera evidencia que muestre una debilidad. Generar `salidas/hallazgos/H-001.md` desde la plantilla, con estado `pendiente`, y su fila en `salidas/matriz_hallazgos.csv`. Registrar también en `salidas/inventario_activos.md` los datos del activo visibles en esa evidencia (FR-005, Q1). Etiquetar [INFERENCIA] lo que no sea visible y comprobar que `Test-Salidas.ps1` termina con 0 [requiere evidencia del auditor: `evidencias/EV-NNN_<tema>.<ext>`] [E3] [Talla: M | 3 pts]
 
 **Checkpoint**: US1 y US2 funcionan cada una por separado.
 
@@ -183,8 +184,8 @@ refleja (SC-005).
 - [ ] T021 [US3] Ampliar C6 en `scripts/Test-Salidas.ps1` para validar la sección Recomendación.
   - `Acción`, `Responsable sugerido` y `Criterio de cierre` no pueden estar vacíos.
   - `Prioridad` debe ser "`P0` | `P1` | `P2` | `P3`".
-  - Emitir `[AVISO]` si la prioridad difiere de la derivada de la severidad (Crítica→P0, Alta→P1, Media→P2, Baja/Informativa→P3), porque el auditor puede ajustarla (FR-009).
-  - Emitir `[AVISO]` si `Comandos propuestos` menciona una IPv4 distinta de `192.168.56.101` (FR-012).
+  - **C13:** emitir `[AVISO]` si la prioridad difiere de la derivada de la severidad (Crítica→P0, Alta→P1, Media→P2, Baja/Informativa→P3), porque el auditor puede ajustarla (FR-009).
+  - **C14:** emitir `[AVISO]` si `Comandos propuestos` menciona una IPv4 distinta de `192.168.56.101` (FR-012).
 
   [E3] [Talla: S | 2 pts]
 - [ ] T022 [P] [US3] Crear el fixture `scripts/tests/fixtures/invalido-recomendacion-incompleta/` (falta el `Criterio de cierre`) y el fixture `scripts/tests/fixtures/aviso-prioridad-ajustada/` (prioridad distinta de la derivada; debe terminar con 0 y mostrar `[AVISO]`) [E3] [Talla: XS | 1 pts]
@@ -198,15 +199,15 @@ refleja (SC-005).
 
 **Purpose**: protección de datos, documentación y cierre con revisión humana.
 
-- [ ] T024 [P] Implementar C11 y C12 en `scripts/Test-Salidas.ps1`, ambas como `[AVISO]`.
+- [ ] T024 [P] Implementar C11 y C12 en `scripts/Test-Salidas.ps1`, ambas como `[AVISO]`. C11 es heurística y puede dar falsos positivos, por eso no falla; pero un `[AVISO]` C11 en `salidas/` bloquea el PR hasta que el auditor lo resuelva (T028, SC-006).
   - **C11:** detectar en `salidas/` patrones de secretos en claro: `password=`, `pass:`, `$1$`, `$6$`, `BEGIN … PRIVATE KEY` y una cadena hexadecimal de 32 o más caracteres después de `hash` (FR-013, SC-006).
   - **C12:** columnas adicionales en la matriz (`contracts/matriz_hallazgos.md`).
 
   [E3] [Talla: S | 2 pts]
-- [ ] T025 [P] Crear el fixture `scripts/tests/fixtures/aviso-secreto/` con un `password=` sin enmascarar en una observación. Debe terminar con 0 y mostrar `[AVISO]` C11 [E3] [Talla: XS | 1 pts]
+- [ ] T025 [P] Crear el fixture `scripts/tests/fixtures/aviso-secreto/` con el valor ficticio `password=FIXTURE_FICTICIO` en una observación, y un `LEEME.md` que diga que es un dato de prueba inventado y no una credencial (los fixtures no son entregables; constitución, principio V). Debe terminar con 0 y mostrar `[AVISO]` C11 [E3] [Talla: XS | 1 pts]
 - [ ] T026 [P] Actualizar la sección "Estructura" de `README.md` con `docs/plantillas/`, `scripts/` y `specs/`, y con el comando del validador [E2] [Talla: XS | 1 pts]
-- [ ] T027 Ejecutar los escenarios 0–3 de `specs/001-analisis-evidencias/quickstart.md`, incluida la búsqueda de comandos de red en `scripts/*.ps1` (debe dar 0 coincidencias). Pegar el resultado, las dudas y los supuestos en la descripción del PR (FR-016) [E3] [Talla: S | 2 pts]
-- [ ] T028 Revisión humana: el auditor completa el bloque "Revisión" de cada `salidas/hallazgos/H-NNN.md` (estado, revisor, fecha) y alinea `estado_revision` en la matriz. Abrir el PR contra `main` con el checklist de la DoD y `Closes #n` de los issues cubiertos [E3] [Talla: S | 2 pts]
+- [ ] T027 Ejecutar los escenarios 0–3 de `specs/001-analisis-evidencias/quickstart.md`, incluida la búsqueda de comandos de red en `scripts/*.ps1` (debe dar 0 coincidencias). Medir con `Measure-Command` el tiempo del validador sobre `salidas/` (meta del plan: < 5 s). Pegar el resultado, las dudas y los supuestos en la descripción del PR (FR-016) [E3] [Talla: S | 2 pts]
+- [ ] T028 Revisión humana: el auditor completa el bloque "Revisión" de cada `salidas/hallazgos/H-NNN.md` (estado, revisor, fecha) y alinea `estado_revision` en la matriz. Resolver todo `[AVISO]` C11 sobre `salidas/` (enmascarar o justificar el falso positivo en el PR). Abrir el PR contra `main` con el checklist de la DoD y `Closes #n` de los issues cubiertos [E3] [Talla: S | 2 pts]
 
 ---
 
