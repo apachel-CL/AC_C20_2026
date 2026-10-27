@@ -8,6 +8,32 @@
 
 **Input**: User description: "Flujo de análisis de evidencias del auditor. Como auditor quiero transformar cada evidencia técnica de ./evidencias/ (capturas y salidas de comandos) en hallazgos trazables, para entregar resultados verificables. El flujo: (1) inventaria las evidencias y les asigna ID EV-001, EV-002…; (2) registra la observación textual de lo visible (IPs, máscaras, MAC, puertos, servicios, versiones, usuarios, mensajes); (3) clasifica cada evidencia como "de hallazgo", "de contexto" (alimenta el inventario de activos y no genera hallazgo) o "insuficiente" (indicando qué falta); (4) solo para las de hallazgo, redacta el hallazgo H-XXX con severidad (Crítica, Alta, Media, Baja, Informativa) y justificación; (5) propone una recomendación concreta, priorizada y verificable con responsable sugerido y criterio de cierre. Salidas en ./salidas/: inventario_evidencias.md, inventario_activos.md, evidencia_insuficiente.md, hallazgos/H-XXX.md y matriz_hallazgos.csv. Caso de prueba obligatorio: EV-002 (salida de ifconfig del host metasploitable), que es evidencia de contexto. Fuera de alcance de esta funcionalidad: mapeo normativo detallado (funcionalidad 002) y resumen ejecutivo y plan de remediación (funcionalidad 003)."
 
+## Clarifications
+
+### Session 2026-10-26
+
+- Q: ¿Qué criterio decide que una evidencia es "de hallazgo" y no "de contexto"? → A: Es de
+  hallazgo si muestra al menos una debilidad concreta visible: servicio inseguro, versión
+  vulnerable, configuración débil, credencial por defecto o exposición innecesaria. Si solo
+  identifica el activo, es de contexto. Si muestra ambas cosas, se clasifica de hallazgo y sus
+  datos del activo igualmente pasan al inventario de activos.
+- Q: ¿Qué columnas debe tener matriz_hallazgos.csv? → A: Tiene estas columnas, en este orden:
+  `id_hallazgo`, `enunciado`, `evidencias` (EV separadas por `;`), `severidad`, `control_iso`,
+  `certeza_iso`, `recomendacion`, `prioridad`, `responsable_sugerido`, `criterio_cierre`,
+  `estado_revision`. Formato UTF-8, separador coma y fila de encabezado. Las columnas legales las
+  agrega la funcionalidad 002.
+- Q: ¿Cómo deben nombrarse los archivos de evidencia en ./evidencias/? → A: Con el formato
+  `EV-NNN_<comando-o-tema>.<ext>` (p. ej. `EV-002_ifconfig.png`). A un archivo sin prefijo el
+  flujo le asigna el siguiente ID libre y propone renombrarlo; el auditor confirma.
+- Q: ¿Cómo se registra la revisión humana de cada hallazgo? → A: Cada `H-NNN.md` tiene un
+  bloque "Revisión" con estado (pendiente / aprobado / corregido / descartado), revisor, fecha y
+  comentario. `estado_revision` de la matriz replica ese estado. El cambio de estado entra por
+  un PR con el checklist de la Definition of Done.
+- Q: ¿Qué datos se enmascaran en las salidas? → A: Siempre se enmascaran contraseñas, hashes,
+  tokens, claves y los datos de personas reales. Los identificadores técnicos del laboratorio
+  (IP, MAC, hostname y usuarios por defecto como `msfadmin`) se transcriben literalmente porque
+  son ficticios y necesarios para la trazabilidad.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Inventariar, observar y clasificar evidencias (Priority: P1)
@@ -81,8 +107,12 @@ que las evidencias estén inventariadas y clasificadas (historia 1).
 2. **Given** se creó un hallazgo, **When** se revisa `matriz_hallazgos.csv`, **Then** existe
    exactamente una fila para ese H-XXX, coherente con su archivo.
 3. **Given** un hallazgo recién redactado, **When** el auditor aún no lo ha revisado, **Then**
-   su estado es "pendiente de revisión" y no puede figurar como cerrado.
-4. **Given** el hallazgo contiene una afirmación no visible en la evidencia, **When** se
+   su bloque "Revisión" tiene estado `pendiente`, sin revisor ni fecha, y no figura como
+   cerrado.
+4. **Given** el auditor revisó un hallazgo, **When** registra su decisión, **Then** el bloque
+   "Revisión" tiene estado `aprobado`, `corregido` o `descartado`, revisor y fecha, y
+   `estado_revision` de la matriz muestra el mismo valor.
+5. **Given** el hallazgo contiene una afirmación no visible en la evidencia, **When** se
    redacta, **Then** esa afirmación lleva la etiqueta [INFERENCIA].
 
 ---
@@ -120,14 +150,20 @@ refleja esos datos.
   recomendaciones.
 - **Evidencia que muestra un activo distinto de `192.168.56.101`:** se marca como fuera de
   alcance, no se analiza y se informa al auditor.
-- **Evidencia con credenciales o datos personales visibles:** la observación los enmascara. El
-  archivo original no se versiona (el repositorio es público).
+- **Evidencia con credenciales o datos de personas reales visibles:** la observación los
+  enmascara según FR-013. El archivo original no se versiona (el repositorio es público).
 - **Dos archivos con la misma evidencia (duplicado):** se inventarían por separado y se anota
   que están duplicados. No se generan hallazgos duplicados.
+- **Evidencia mixta (identifica el activo y además muestra una debilidad):** se clasifica de
+  hallazgo, y sus datos del activo igualmente pasan al inventario de activos.
 - **Una evidencia que sustenta varios hallazgos, o un hallazgo con varias evidencias:** se
   admiten las dos relaciones y la matriz refleja todas las referencias.
 - **Volver a ejecutar el flujo con evidencias nuevas:** los IDs EV-XXX y H-XXX ya asignados se
   conservan y los nuevos continúan la numeración.
+- **Archivo sin prefijo `EV-NNN_`:** recibe el siguiente ID libre y el flujo propone el nuevo
+  nombre al auditor.
+- **Dos archivos con el mismo prefijo `EV-NNN`:** se informa el conflicto y ninguno de los dos
+  se analiza hasta que el auditor lo resuelva.
 - **Evidencia ilegible o en un formato que no se puede leer:** se clasifica como insuficiente e
   indica qué falta.
 
@@ -135,8 +171,11 @@ refleja esos datos.
 
 ### Functional Requirements
 
-- **FR-001**: El flujo MUST asignar a cada archivo de `./evidencias/` un ID único y estable con
-  formato `EV-NNN`. Un ID asignado no cambia en ejecuciones posteriores.
+- **FR-001**: Cada archivo de `./evidencias/` MUST tener un ID único y estable con formato
+  `EV-NNN`, que viaja en el nombre del archivo: `EV-NNN_<comando-o-tema>.<ext>` (p. ej.
+  `EV-002_ifconfig.png`). Para un archivo sin prefijo, el flujo le asigna el siguiente ID libre y
+  propone al auditor renombrarlo; no lo renombra sin confirmación. Un ID asignado no cambia en
+  ejecuciones posteriores, y dos archivos con el mismo ID se informan como conflicto.
 - **FR-002**: El flujo MUST registrar en `salidas/inventario_evidencias.md` cada evidencia con:
   - su ID;
   - el archivo de origen;
@@ -146,10 +185,13 @@ refleja esos datos.
   puertos, servicios, versiones, usuarios, mensajes) y etiquetarlo [HECHO]. Debe indicar la zona
   resaltada, si la hay.
 - **FR-004**: El flujo MUST clasificar cada evidencia en exactamente una categoría: "de
-  hallazgo", "de contexto" o "insuficiente".
-- **FR-005**: Los datos del activo que aparecen en la evidencia de contexto MUST registrarse en
-  `salidas/inventario_activos.md`, con la evidencia de origen. La evidencia de contexto MUST NOT
-  generar hallazgos.
+  hallazgo", "de contexto" o "insuficiente". Es "de hallazgo" si muestra al menos una debilidad
+  concreta visible: servicio inseguro, versión vulnerable, configuración débil, credencial por
+  defecto o exposición innecesaria. Es "de contexto" si solo identifica el activo. La
+  clasificación MUST citar la debilidad observada cuando es "de hallazgo".
+- **FR-005**: Los datos del activo visibles en evidencia de contexto **o de hallazgo** MUST
+  registrarse en `salidas/inventario_activos.md`, con la evidencia de origen. La evidencia de
+  contexto MUST NOT generar hallazgos.
 - **FR-006**: Cada evidencia insuficiente MUST quedar registrada en
   `salidas/evidencia_insuficiente.md` indicando qué falta para analizarla.
 - **FR-007**: El flujo MUST crear un hallazgo solo a partir de evidencia clasificada "de
@@ -168,14 +210,28 @@ refleja esos datos.
   - criterio de cierre verificable.
 - **FR-010**: El flujo MUST mantener `salidas/matriz_hallazgos.csv` con una fila por hallazgo,
   coherente con los archivos `H-NNN.md`. Cada fila referencia solo evidencias existentes en el
-  inventario.
+  inventario. Formato: UTF-8, separador coma, fila de encabezado. Columnas, en este orden:
+  `id_hallazgo`, `enunciado`, `evidencias` (IDs separados por `;`), `severidad`,
+  `control_iso`, `certeza_iso`, `recomendacion`, `prioridad`, `responsable_sugerido`,
+  `criterio_cierre`, `estado_revision`.
 - **FR-011**: Toda afirmación no visible directamente en la evidencia MUST etiquetarse
   [INFERENCIA]. No se inventan IPs, versiones, artículos ni datos ausentes.
 - **FR-012**: El flujo MUST NOT ejecutar escaneos, exploits ni comandos contra ningún sistema.
   Si hace falta verificar algo, propone los comandos al auditor.
-- **FR-013**: Las salidas MUST enmascarar credenciales y datos personales.
-- **FR-014**: Cada hallazgo MUST registrar su estado de revisión humana. Un hallazgo no puede
-  figurar como cerrado sin la revisión del auditor.
+- **FR-013**: Las salidas MUST enmascarar siempre contraseñas, hashes, tokens, claves y los
+  datos de personas reales (por ejemplo, `****`). Los identificadores técnicos del laboratorio
+  se transcriben literalmente: IP, MAC, hostname y usuarios por defecto del sistema (como
+  `msfadmin`).
+- **FR-014**: Cada `H-NNN.md` MUST incluir un bloque "Revisión" con:
+  - estado: `pendiente`, `aprobado`, `corregido` o `descartado`;
+  - revisor;
+  - fecha (AAAA-MM-DD);
+  - comentario.
+
+  El flujo crea todo hallazgo con estado `pendiente`; solo el auditor cambia ese estado.
+  `estado_revision` de la matriz MUST coincidir con el bloque. Un cambio de estado se integra
+  mediante un PR con el checklist de la Definition of Done. Un hallazgo cuenta como cerrado solo
+  si está `aprobado` o `corregido`.
 - **FR-015**: Las evidencias que muestren activos fuera del alcance (cualquier activo distinto
   de `192.168.56.101`) MUST marcarse como fuera de alcance y no analizarse.
 - **FR-016**: Al terminar, el flujo MUST resumir lo generado y listar dudas y supuestos.
@@ -204,8 +260,8 @@ refleja esos datos.
   - estado de revisión.
 - **Recomendación**: acción asociada a un hallazgo, con prioridad, responsable sugerido y
   criterio de cierre.
-- **Matriz de hallazgos**: vista tabular con una fila por hallazgo, que resume sus evidencias,
-  severidad, control y recomendación.
+- **Matriz de hallazgos**: vista tabular con una fila por hallazgo y las 11 columnas definidas
+  en FR-010. La funcionalidad 002 le agrega las columnas legales.
 
 ## Success Criteria *(mandatory)*
 
@@ -223,7 +279,8 @@ refleja esos datos.
 - **SC-004**: El 100 % de las evidencias insuficientes indica qué falta.
 - **SC-005**: El 100 % de los hallazgos tiene severidad, justificación, control ISO preliminar y
   recomendación con responsable y criterio de cierre.
-- **SC-006**: Las salidas contienen 0 credenciales o datos personales sin enmascarar.
+- **SC-006**: Las salidas contienen 0 contraseñas, hashes, tokens, claves o datos de personas
+  reales sin enmascarar.
 - **SC-007**: Partiendo de cualquier fila de la matriz, el auditor llega a la evidencia de
   origen en menos de 2 minutos.
 - **SC-008**: El 100 % de los hallazgos marcados como cerrados tiene registrada la revisión
