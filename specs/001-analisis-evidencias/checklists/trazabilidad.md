@@ -16,38 +16,38 @@ implica ejecutar comandos contra sistemas.
 
 ## Comprobabilidad de los requisitos
 
-- [ ] CHK001 ¿Es exhaustiva la lista de "debilidades concretas visibles" que convierte una evidencia en "de hallazgo", o queda abierta, y en ese caso con qué criterio? [Clarity, Spec §FR-004, Clarifications Q1]
-- [ ] CHK002 ¿Están definidos criterios objetivos para asignar cada nivel de severidad (Crítica…Informativa), de modo que dos revisores lleguen al mismo valor? [Clarity, Gap, Spec §FR-007]
-- [ ] CHK003 ¿Está definido qué significa cada nivel de certeza del control ISO (Alta/Media/Baja)? [Clarity, Spec §FR-008]
-- [ ] CHK004 ¿Está la derivación severidad → prioridad (P0–P3) como requisito, y no solo como supuesto y en el modelo de datos? [Consistency, Spec §FR-009, Assumptions, data-model.md]
-- [ ] CHK005 ¿Define FR-003 qué se registra cuando la evidencia no tiene zona resaltada? [Clarity, Spec §FR-003]
-- [ ] CHK006 ¿Especifica FR-016 dónde se registran el resumen, las dudas y los supuestos (archivo o salida de la sesión), para que se puedan verificar? [Gap, Spec §FR-016]
-- [ ] CHK007 ¿Define SC-007 ("menos de 2 minutos") cómo y sobre qué muestra se mide? [Measurability, Spec §SC-007]
-- [ ] CHK008 ¿Coinciden los "seis datos visibles" de SC-003 con los datos del escenario de aceptación US1-2 y del quickstart, en número y desglose? Por ejemplo, el usuario y la máscara. [Consistency, Spec §SC-003, Spec §US1]
-- [ ] CHK009 ¿Tiene cada requisito funcional (FR-001…FR-016) al menos un escenario de aceptación o criterio de éxito que lo cubra? [Coverage, Traceability]
-- [ ] CHK010 ¿Está definido qué es un "duplicado" de evidencia (mismo contenido, mismo comando, misma captura) para aplicar el caso límite correspondiente? [Ambiguity, Spec §Edge Cases]
+- [x] CHK001 ¿Es exhaustiva la lista de "debilidades concretas visibles" que convierte una evidencia en "de hallazgo", o queda abierta, y en ese caso con qué criterio? [Clarity, Spec §FR-004, Clarifications Q1]
+- [x] CHK002 ¿Están definidos criterios objetivos para asignar cada nivel de severidad (Crítica…Informativa), de modo que dos revisores lleguen al mismo valor? [Clarity, Gap, Spec §FR-007]
+- [x] CHK003 ¿Está definido qué significa cada nivel de certeza del control ISO (Alta/Media/Baja)? [Clarity, Spec §FR-008]
+- [x] CHK004 ¿Está la derivación severidad → prioridad (P0–P3) como requisito, y no solo como supuesto y en el modelo de datos? [Consistency, Spec §FR-009, Assumptions, data-model.md]
+- [x] CHK005 ¿Define FR-003 qué se registra cuando la evidencia no tiene zona resaltada? [Clarity, Spec §FR-003]
+- [x] CHK006 ¿Especifica FR-016 dónde se registran el resumen, las dudas y los supuestos (archivo o salida de la sesión), para que se puedan verificar? [Gap, Spec §FR-016]
+- [x] CHK007 ¿Define SC-007 ("menos de 2 minutos") cómo y sobre qué muestra se mide? [Measurability, Spec §SC-007]
+- [x] CHK008 ¿Coinciden los "seis datos visibles" de SC-003 con los datos del escenario de aceptación US1-2 y del quickstart, en número y desglose? Por ejemplo, el usuario y la máscara. [Consistency, Spec §SC-003, Spec §US1]
+- [x] CHK009 ¿Tiene cada requisito funcional (FR-001…FR-016) al menos un escenario de aceptación o criterio de éxito que lo cubra? [Coverage, Traceability]
+- [x] CHK010 ¿Está definido qué es un "duplicado" de evidencia (mixsmo contenido, mismo comando, misma captura) para aplicar el caso límite correspondiente? [Ambiguity, Spec §Edge Cases]
 
 ## Integridad de la cadena de trazabilidad
 
-- [ ] CHK011 ¿Son coherentes FR-004 ("exactamente una" de tres categorías) con FR-015 y las entidades clave, que agregan una cuarta clasificación `fuera-de-alcance`? [Conflict, Spec §FR-004, §FR-015, §Key Entities]
-- [ ] CHK012 ¿Está especificado qué pasa con los hallazgos cuando, durante la revisión humana, se reclasifica una evidencia de "de hallazgo" a "de contexto" o "insuficiente"? [Gap, Recovery]
-- [ ] CHK013 ¿Está definido qué ocurre con un hallazgo cuya evidencia se renombra, se elimina o deja de estar en `./evidencias/` (referencia huérfana)? [Edge Case, Gap]
-- [ ] CHK014 ¿Está definido si un hallazgo `descartado` permanece en la matriz y si cuenta para SC-002, SC-005 y SC-008? [Gap, Spec §FR-014]
-- [ ] CHK015 ¿Está explícito que los IDs H-NNN de hallazgos descartados no se reutilizan, igual que los EV-NNN? [Gap, Spec §FR-001, §Edge Cases]
-- [ ] CHK016 ¿Está definida la cardinalidad entre hallazgo y recomendación (exactamente una por hallazgo, o varias)? [Clarity, Spec §FR-009]
-- [ ] CHK017 ¿Exige algún requisito que cada dato del inventario de activos sea trazable a una evidencia concreta, incluidos los que vienen de evidencia mixta? [Completeness, Spec §FR-005, Clarifications Q1]
-- [ ] CHK018 ¿Está especificado cómo se vincula una evidencia insuficiente con la nueva evidencia que la reemplaza, una vez que el auditor obtiene lo que faltaba? [Gap, Spec §FR-006]
-- [ ] CHK019 ¿Está documentado cómo la funcionalidad 002 extenderá la cadena (control ISO preliminar → mapeo detallado) sin romper la trazabilidad de 001? [Dependency, Spec §FR-008, contracts/matriz_hallazgos.md]
+- [x] CHK011 ¿Son coherentes FR-004 ("exactamente una" de tres categorías) con FR-015 y las entidades clave, que agregan una cuarta clasificación `fuera-de-alcance`? [Conflict, Spec §FR-004, §FR-015, §Key Entities]
+- [x] CHK012 ¿Está especificado qué pasa con los hallazgos cuando, durante la revisión humana, se reclasifica una evidencia de "de hallazgo" a "de contexto" o "insuficiente"? [Gap, Recovery]
+- [x] CHK013 ¿Está definido qué ocurre con un hallazgo cuya evidencia se renombra, se elimina o deja de estar en `./evidencias/` (referencia huérfana)? [Edge Case, Gap]
+- [x] CHK014 ¿Está definido si un hallazgo `descartado` permanece en la matriz y si cuenta para SC-002, SC-005 y SC-008? [Gap, Spec §FR-014]
+- [x] CHK015 ¿Está explícito que los IDs H-NNN de hallazgos descartados no se reutilizan, igual que los EV-NNN? [Gap, Spec §FR-001, §Edge Cases]
+- [x] CHK016 ¿Está definida la cardinalidad entre hallazgo y recomendación (exactamente una por hallazgo, o varias)? [Clarity, Spec §FR-009]
+- [x] CHK017 ¿Exige algún requisito que cada dato del inventario de activos sea trazable a una evidencia concreta, incluidos los que vienen de evidencia mixta? [Completeness, Spec §FR-005, Clarifications Q1]
+- [x] CHK018 ¿Está especificado cómo se vincula una evidencia insuficiente con la nueva evidencia que la reemplaza, una vez que el auditor obtiene lo que faltaba? [Gap, Spec §FR-006]
+- [x] CHK019 ¿Está documentado cómo la funcionalidad 002 extenderá la cadena (control ISO preliminar → mapeo detallado) sin romper la trazabilidad de 001? [Dependency, Spec §FR-008, contracts/matriz_hallazgos.md]
 
 ## Regla de no ejecución
 
-- [ ] CHK020 ¿Delimita FR-012 qué cuenta como "comando contra un sistema", distinguiéndolo de las operaciones locales de solo lectura sobre el repositorio (el validador)? [Clarity, Spec §FR-012, plan.md]
-- [ ] CHK021 ¿Exige algún requisito que los comandos propuestos al auditor apunten solo al activo en alcance (`192.168.56.101`)? [Gap, Spec §FR-012, §FR-015]
-- [ ] CHK022 ¿Está especificado cómo vuelve al flujo el resultado de un comando propuesto, como nueva evidencia con su propio EV-NNN, sin que Claude lo ejecute? [Gap, Spec §FR-012]
-- [ ] CHK023 ¿Está la garantía "sin red y solo lectura" del validador en la spec o en el plan como requisito trazable, y no solo en el contrato? [Traceability, contracts/test-salidas.md, plan.md §Constraints]
-- [ ] CHK024 ¿Es coherente la columna "comando propuesto" de `evidencia_insuficiente.md` con FR-012, dejando explícito que el flujo nunca la ejecuta? [Consistency, contracts/inventarios.md]
-- [ ] CHK025 ¿Existe un requisito o compuerta que impida que `tasks.md` incluya tareas que ejecuten escaneos, exploits o comandos contra sistemas? [Gap, Constitution §IV]
-- [ ] CHK026 ¿Está especificado que renombrar archivos de evidencia (FR-001) requiere confirmación del auditor también cuando se automatiza? [Consistency, Spec §FR-001]
+- [x] CHK020 ¿Delimita FR-012 qué cuenta como "comando contra un sistema", distinguiéndolo de las operaciones locales de solo lectura sobre el repositorio (el validador)? [Clarity, Spec §FR-012, plan.md]
+- [x] CHK021 ¿Exige algún requisito que los comandos propuestos al auditor apunten solo al activo en alcance (`192.168.56.101`)? [Gap, Spec §FR-012, §FR-015]
+- [x] CHK022 ¿Está especificado cómo vuelve al flujo el resultado de un comando propuesto, como nueva evidencia con su propio EV-NNN, sin que Claude lo ejecute? [Gap, Spec §FR-012]
+- [x] CHK023 ¿Está la garantía "sin red y solo lectura" del validador en la spec o en el plan como requisito trazable, y no solo en el contrato? [Traceability, contracts/test-salidas.md, plan.md §Constraints]
+- [x] CHK024 ¿Es coherente la columna "comando propuesto" de `evidencia_insuficiente.md` con FR-012, dejando explícito que el flujo nunca la ejecuta? [Consistency, contracts/inventarios.md]
+- [x] CHK025 ¿Existe un requisito o compuerta que impida que `tasks.md` incluya tareas que ejecuten escaneos, exploits o comandos contra sistemas? [Gap, Constitution §IV]
+- [x] CHK026 ¿Está especificado que renombrar archivos de evidencia (FR-001) requiere confirmación del auditor también cuando se automatiza? [Consistency, Spec §FR-001]
 
 ## Notes
 
