@@ -42,10 +42,10 @@ El auditor deja sus capturas y salidas de comandos en `./evidencias/`. El flujo 
 una un ID `EV-XXX` y registra en el inventario de evidencias:
 
 - la observación textual de lo visible, etiquetada [HECHO];
-- la clasificación: de hallazgo, de contexto o insuficiente.
+- la clasificación: de hallazgo, de contexto, insuficiente o fuera de alcance.
 
-Lo que la evidencia de contexto revela del activo se lleva al inventario de activos. De la
-evidencia insuficiente se deja constancia de qué falta.
+Lo que la evidencia revela del activo se lleva al inventario de activos. De la evidencia
+insuficiente se deja constancia de qué falta.
 
 **Why this priority**: es la base de la cadena de trazabilidad. Sin evidencia inventariada y
 clasificada no puede existir ningún hallazgo (Constitución, principio II). Por sí sola ya entrega
@@ -55,7 +55,8 @@ valor: el inventario de evidencias y el de activos.
 se comprueba que:
 
 - aparece en el inventario de evidencias clasificada como **de contexto**;
-- su observación transcribe tal cual hostname, interfaz, MAC, IPv4, máscara y broadcast;
+- su observación transcribe tal cual los siete datos de SC-003 (hostname, interfaz, MAC, IPv4,
+  máscara, broadcast y usuario);
 - el inventario de activos contiene esos datos con la fuente EV-002;
 - no se generó ningún hallazgo.
 
@@ -68,8 +69,10 @@ se comprueba que:
    `inventario_activos.md` registra:
    - hostname `metasploitable`;
    - interfaz `eth0` y MAC `08:00:27:cd:02:f4`;
-   - IPv4 `192.168.56.101/24` y broadcast `192.168.56.255`;
-   - EV-002 como fuente.
+   - IPv4 `192.168.56.101` y la máscara tal como aparece en la captura;
+   - broadcast `192.168.56.255`;
+   - usuario `msfadmin`;
+   - EV-002 como fuente de cada dato.
 
    Además, no existe ningún `H-XXX` cuya única evidencia sea EV-002.
 3. **Given** una evidencia en la que un dato es solo parcialmente legible (por ejemplo, la IPv6
@@ -159,7 +162,11 @@ refleja esos datos.
 - **Una evidencia que sustenta varios hallazgos, o un hallazgo con varias evidencias:** se
   admiten las dos relaciones y la matriz refleja todas las referencias.
 - **Volver a ejecutar el flujo con evidencias nuevas:** los IDs EV-XXX y H-XXX ya asignados se
-  conservan y los nuevos continúan la numeración.
+  conservan y los nuevos continúan la numeración. Un ID nunca se reutiliza, aunque su hallazgo
+  esté `descartado`.
+- **El auditor obtiene lo que faltaba de una evidencia insuficiente:** lo entrega como un
+  archivo nuevo, con su propio EV-NNN, y el registro de la evidencia insuficiente indica cuál la
+  reemplaza (FR-017).
 - **Archivo sin prefijo `EV-NNN_`:** recibe el siguiente ID libre y el flujo propone el nuevo
   nombre al auditor.
 - **Dos archivos con el mismo prefijo `EV-NNN`:** se informa el conflicto y ninguno de los dos
@@ -185,7 +192,8 @@ refleja esos datos.
   puertos, servicios, versiones, usuarios, mensajes) y etiquetarlo [HECHO]. Debe indicar la zona
   resaltada, si la hay.
 - **FR-004**: El flujo MUST clasificar cada evidencia en exactamente una categoría: "de
-  hallazgo", "de contexto" o "insuficiente". Es "de hallazgo" si muestra al menos una debilidad
+  hallazgo", "de contexto", "insuficiente" o "fuera de alcance". "Fuera de alcance" (FR-015)
+  prevalece sobre las demás y se evalúa primero. Es "de hallazgo" si muestra al menos una debilidad
   concreta visible: servicio inseguro, versión vulnerable, configuración débil, credencial por
   defecto o exposición innecesaria. Es "de contexto" si solo identifica el activo. La
   clasificación MUST citar la debilidad observada cuando es "de hallazgo".
@@ -203,11 +211,14 @@ refleja esos datos.
 - **FR-008**: Cada hallazgo MUST incluir un control preliminar de ISO/IEC 27001:2022 (Anexo A)
   con su nivel de certeza (Alta/Media/Baja), o "verificar" si hay duda. El mapeo normativo
   detallado y legal queda para la funcionalidad 002.
-- **FR-009**: Cada hallazgo MUST incluir una recomendación con:
+- **FR-009**: Cada hallazgo MUST incluir exactamente una recomendación con:
   - acción concreta;
   - prioridad;
   - responsable sugerido;
   - criterio de cierre verificable.
+
+  La prioridad se deriva de la severidad (Crítica → P0, Alta → P1, Media → P2, Baja o
+  Informativa → P3). Solo el auditor puede ajustarla, en la revisión.
 - **FR-010**: El flujo MUST mantener `salidas/matriz_hallazgos.csv` con una fila por hallazgo,
   coherente con los archivos `H-NNN.md`. Cada fila referencia solo evidencias existentes en el
   inventario. Formato: UTF-8, separador coma, fila de encabezado. Columnas, en este orden:
@@ -217,7 +228,13 @@ refleja esos datos.
 - **FR-011**: Toda afirmación no visible directamente en la evidencia MUST etiquetarse
   [INFERENCIA]. No se inventan IPs, versiones, artículos ni datos ausentes.
 - **FR-012**: El flujo MUST NOT ejecutar escaneos, exploits ni comandos contra ningún sistema.
-  Si hace falta verificar algo, propone los comandos al auditor.
+  - **Qué es un "comando contra un sistema":** todo comando que envía tráfico de red a un host o
+    se ejecuta en un host, incluido `192.168.56.101`.
+  - **Qué sí está permitido:** las operaciones locales sobre los archivos del repositorio
+    (leer evidencias, escribir en `salidas/` y ejecutar el validador de solo lectura).
+  - **Comandos propuestos:** si hace falta verificar algo, el flujo propone los comandos al
+    auditor. Deben apuntar solo al activo en alcance (`192.168.56.101`) e ir marcados como
+    "propuesto: lo ejecuta el auditor".
 - **FR-013**: Las salidas MUST enmascarar siempre contraseñas, hashes, tokens, claves y los
   datos de personas reales (por ejemplo, `****`). Los identificadores técnicos del laboratorio
   se transcriben literalmente: IP, MAC, hostname y usuarios por defecto del sistema (como
@@ -231,10 +248,18 @@ refleja esos datos.
   El flujo crea todo hallazgo con estado `pendiente`; solo el auditor cambia ese estado.
   `estado_revision` de la matriz MUST coincidir con el bloque. Un cambio de estado se integra
   mediante un PR con el checklist de la Definition of Done. Un hallazgo cuenta como cerrado solo
-  si está `aprobado` o `corregido`.
+  si está `aprobado` o `corregido`. Un hallazgo `descartado` permanece en su archivo y en la
+  matriz con ese estado (no se borra) y su ID no se reutiliza.
 - **FR-015**: Las evidencias que muestren activos fuera del alcance (cualquier activo distinto
   de `192.168.56.101`) MUST marcarse como fuera de alcance y no analizarse.
-- **FR-016**: Al terminar, el flujo MUST resumir lo generado y listar dudas y supuestos.
+- **FR-016**: Al terminar, el flujo MUST resumir lo generado y listar las dudas y los supuestos.
+  Ese resumen se copia en la descripción del PR que integra las salidas.
+- **FR-017**: El resultado de un comando propuesto que ejecute el auditor MUST entrar al flujo
+  como una evidencia nueva, con su propio EV-NNN. Si completa una evidencia insuficiente,
+  `evidencia_insuficiente.md` MUST indicar qué EV-NNN la reemplaza.
+- **FR-018**: Las tareas de esta funcionalidad MUST limitarse a documentos, plantillas y
+  validación local. Ninguna tarea puede consistir en ejecutar escaneos, exploits ni comandos
+  contra sistemas.
 
 ### Key Entities
 
@@ -244,7 +269,8 @@ refleja esos datos.
   - observación;
   - clasificación (de hallazgo / de contexto / insuficiente / fuera de alcance);
   - qué falta (solo si es insuficiente).
-- **Activo**: sistema evaluado e identificado por evidencia de contexto. Atributos:
+- **Activo**: sistema evaluado e identificado por evidencia de contexto o de hallazgo.
+  Atributos:
   - hostname;
   - interfaces;
   - MAC;
@@ -274,8 +300,8 @@ refleja esos datos.
 - **SC-003**: Caso de prueba EV-002:
   - queda clasificada como de contexto;
   - genera 0 hallazgos;
-  - sus seis datos visibles (hostname, interfaz, MAC, IPv4/máscara, broadcast, usuario) aparecen
-    en el inventario de activos idénticos a la captura.
+  - sus siete datos visibles (hostname, interfaz, MAC, IPv4, máscara, broadcast y usuario)
+    aparecen en el inventario de activos idénticos a la captura.
 - **SC-004**: El 100 % de las evidencias insuficientes indica qué falta.
 - **SC-005**: El 100 % de los hallazgos tiene severidad, justificación, control ISO preliminar y
   recomendación con responsable y criterio de cierre.
@@ -298,7 +324,5 @@ refleja esos datos.
   artículos, corresponde a la funcionalidad 002.
 - **Resumen ejecutivo y plan de remediación.** Corresponden a la funcionalidad 003. Esta
   funcionalidad solo entrega la recomendación individual por hallazgo.
-- **Prioridad de la recomendación.** Se deriva de la severidad del hallazgo, salvo que el
-  auditor la ajuste en la revisión.
 - **Análisis y revisión.** El análisis lo realiza Claude Code bajo la constitución del proyecto;
   la revisión humana la realiza el auditor.

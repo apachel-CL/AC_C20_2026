@@ -16,6 +16,7 @@ de encabezado.
 
 - `ID`: `^EV-\d{3}$`, único.
 - `Clasificación`: `hallazgo` | `contexto` | `insuficiente` | `fuera-de-alcance`.
+  `fuera-de-alcance` se evalúa primero y prevalece (FR-004, FR-015).
 - `Debilidad / Falta`: no vacío si la clasificación es `hallazgo` o `insuficiente`; `—` en
   los demás casos.
 
@@ -38,10 +39,13 @@ de encabezado.
 ```markdown
 # Evidencia insuficiente
 
-| ID | Qué falta | Cómo obtenerlo (comando propuesto) |
-|---|---|---|
+| ID | Qué falta | Cómo obtenerlo (comando propuesto) | Reemplazada por |
+|---|---|---|---|
 ```
 
 - Cada `ID` aparece en el inventario de evidencias con `Clasificación = insuficiente`, y
   viceversa.
-- La tercera columna solo **propone** comandos para el auditor (constitución, principio IV).
+- La tercera columna solo **propone** comandos para el auditor, dirigidos a `192.168.56.101` y
+  marcados "propuesto: lo ejecuta el auditor" (FR-012).
+- `Reemplazada por`: el `EV-NNN` de la evidencia nueva que completa lo que faltaba (FR-017), o
+  `—`. Si no es `—`, debe existir en el inventario de evidencias.

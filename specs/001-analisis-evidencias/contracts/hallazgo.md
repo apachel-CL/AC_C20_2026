@@ -27,7 +27,7 @@ expresión regular `^- \*\*(.+?)\*\*: (.*)$`.
 - **Prioridad**: P1
 - **Responsable sugerido**: Administrador del sistema
 - **Criterio de cierre**: …
-- **Comandos propuestos**: … (opcional; los ejecuta el auditor)
+- **Comandos propuestos**: … (opcional; solo contra 192.168.56.101; "propuesto: lo ejecuta el auditor")
 
 ## Revisión
 
@@ -48,4 +48,6 @@ expresión regular `^- \*\*(.+?)\*\*: (.*)$`.
 | `Prioridad`: `P0` \| `P1` \| `P2` \| `P3` | FR-009 |
 | `Estado`: `pendiente` \| `aprobado` \| `corregido` \| `descartado` | FR-014 |
 | Si `Estado` ≠ `pendiente`: `Revisor` y `Fecha` (`AAAA-MM-DD`) no vacíos | FR-014, SC-008 |
+| Un hallazgo `descartado` se conserva (archivo y fila de la matriz); su ID no se reutiliza | FR-014 |
+| `Prioridad` por defecto según la severidad (Crítica→P0, Alta→P1, Media→P2, Baja/Informativa→P3) | FR-009 |
 | Sin contraseñas, hashes, tokens ni claves en claro | FR-013 |

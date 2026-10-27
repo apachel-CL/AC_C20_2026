@@ -32,7 +32,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Test-Salidas.ps1 [-R
 | C1 | IDs `EV-NNN` únicos y con formato válido en el inventario | error | FR-001 |
 | C2 | Cada archivo de `-Evidencias` tiene el nombre `EV-NNN_*.*` y está inventariado | error | FR-001, SC-001 |
 | C3 | Clasificación válida; `Debilidad / Falta` presente cuando corresponde | error | FR-004, FR-006 |
-| C4 | `evidencia_insuficiente.md` coincide con las evidencias insuficientes del inventario | error | FR-006, SC-004 |
+| C4 | `evidencia_insuficiente.md` coincide con las evidencias insuficientes del inventario; `Reemplazada por` apunta a un EV existente o es `—` | error | FR-006, FR-017, SC-004 |
 | C5 | `Fuente` de cada activo existe en el inventario | error | FR-005 |
 | C6 | `H-NNN.md`: nombre igual al ID, metadatos obligatorios y enumerados válidos | error | FR-007–FR-009 |
 | C7 | Las evidencias de cada hallazgo existen y al menos una es `hallazgo` | error | SC-002 |

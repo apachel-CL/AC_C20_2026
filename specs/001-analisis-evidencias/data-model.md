@@ -16,6 +16,7 @@ están en `contracts/`.
 | `clasificacion` | enum | `hallazgo` · `contexto` · `insuficiente` · `fuera-de-alcance` |
 | `debilidad` | texto | Obligatoria si `clasificacion = hallazgo` (FR-004) |
 | `falta` | texto | Obligatoria si `clasificacion = insuficiente` (FR-006) |
+| `reemplazada_por` | `EV-NNN` | Opcional, solo si es insuficiente: evidencia nueva que la completa (FR-017) |
 
 **Transiciones**: sin clasificar → una de las cuatro clasificaciones. Una reclasificación solo
 ocurre en la revisión humana.
@@ -61,9 +62,11 @@ Va embebida en el hallazgo.
 | `prioridad` | enum | `P0` · `P1` · `P2` · `P3`; por defecto se deriva de la severidad |
 | `responsable_sugerido` | texto | Rol, no persona |
 | `criterio_cierre` | texto | Verificable |
-| `comandos_propuestos` | texto | Opcional; solo propuestos, nunca ejecutados (FR-012) |
+| `comandos_propuestos` | texto | Opcional; solo contra `192.168.56.101`, nunca ejecutados (FR-012) |
 
-**Prioridad derivada de la severidad** (supuesto de la spec; el auditor la puede ajustar):
+**Cardinalidad**: exactamente una recomendación por hallazgo (FR-009).
+
+**Prioridad derivada de la severidad** (FR-009; solo el auditor la ajusta, en la revisión):
 
 | Severidad | Prioridad |
 |---|---|
@@ -92,6 +95,8 @@ corregido ──(auditor)──▶ aprobado
 ```
 
 - **Cerrado** = `aprobado` o `corregido` (FR-014).
+- **`descartado`** es un estado final: el hallazgo se conserva en su archivo y en la matriz, y
+  su ID no se reutiliza.
 - El flujo solo crea hallazgos en estado `pendiente`.
 
 ## Fila de la matriz
