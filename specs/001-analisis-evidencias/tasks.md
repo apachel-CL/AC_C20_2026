@@ -44,8 +44,8 @@ Estructura del repositorio según plan.md:
 
 **Purpose**: carpetas y ajustes de repositorio que necesitan todas las historias.
 
-- [ ] T001 (#25) Crear `docs/plantillas/`, `scripts/tests/fixtures/` y `salidas/hallazgos/.gitkeep`. En `.gitignore`, anclar la regla de evidencias a la raíz para que no ignore las de los fixtures: reemplazar `evidencias/*` por `/evidencias/*` y `!evidencias/.gitkeep` por `!/evidencias/.gitkeep`. Comprobar con `git check-ignore -v scripts/tests/fixtures/valido/evidencias/x.txt` (no debe aparecer como ignorado) [E2] [Talla: XS | 1 pts]
-- [ ] T002 (#26) [P] Agregar a la sección "Definition of Done" de `.github/pull_request_template.md` estos dos ítems: "- [ ] Bloque Revisión actualizado en cada H-NNN.md tocado (estado, revisor, fecha)" y "- [ ] `scripts/Test-Salidas.ps1` termina sin errores y sin `[AVISO]` C11 pendientes" (research R6, FR-014, SC-006) [E3] [Talla: XS | 1 pts]
+- [X] T001 (#25) Crear `docs/plantillas/`, `scripts/tests/fixtures/` y `salidas/hallazgos/.gitkeep`. En `.gitignore`, anclar la regla de evidencias a la raíz para que no ignore las de los fixtures: reemplazar `evidencias/*` por `/evidencias/*` y `!evidencias/.gitkeep` por `!/evidencias/.gitkeep`. Comprobar con `git check-ignore -v scripts/tests/fixtures/valido/evidencias/x.txt` (no debe aparecer como ignorado) [E2] [Talla: XS | 1 pts]
+- [X] T002 (#26) [P] Agregar a la sección "Definition of Done" de `.github/pull_request_template.md` estos dos ítems: "- [ ] Bloque Revisión actualizado en cada H-NNN.md tocado (estado, revisor, fecha)" y "- [ ] `scripts/Test-Salidas.ps1` termina sin errores y sin `[AVISO]` C11 pendientes" (research R6, FR-014, SC-006) [E3] [Talla: XS | 1 pts]
 
 ---
 
@@ -56,7 +56,7 @@ las tres historias.
 
 **⚠️ CRITICAL**: ninguna historia puede empezar hasta completar esta fase.
 
-- [ ] T003 (#27) Crear el esqueleto de `scripts/Test-Salidas.ps1` según `contracts/test-salidas.md`.
+- [X] T003 (#27) Crear el esqueleto de `scripts/Test-Salidas.ps1` según `contracts/test-salidas.md`.
   - Parámetros `-Ruta` (por defecto `salidas`) y `-Evidencias` (por defecto `evidencias`).
   - Lectura UTF-8 con `[IO.File]::ReadAllText($p, [Text.Encoding]::UTF8)`.
   - Parser de la tabla Markdown que la ubica por su fila de encabezado.
