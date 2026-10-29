@@ -1,3 +1,15 @@
+<!--
+Sync Impact Report
+- Version change: 1.0.0 → 1.0.1 (PATCH: aclaración del listado de salidas; ningún principio cambia)
+- Modified principles: ninguno
+- Modified sections: "Flujo de trabajo y calidad" → Salidas: se agregan `verificacion_articulos.md`
+  y `mapa_normativo.md`, introducidos por la funcionalidad 002 (specs/002-mapeo-normativo)
+- Added sections: ninguna
+- Removed sections: ninguna
+- Origen: hallazgo L3 de /speckit-analyze sobre 002
+- Templates: sin cambios necesarios (.specify/templates/* no listan las salidas)
+- Deferred TODOs: ninguno
+-->
 # Constitución — AC_C20_2026: Auditoría de ciberseguridad híbrida
 
 ## Core Principles
@@ -91,6 +103,8 @@ del auditor autorizado.
   - `hallazgos/H-XXX.md`
   - `matriz_hallazgos.csv`
   - `evidencia_insuficiente.md`
+  - `verificacion_articulos.md` (lista de verificación de artículos legales)
+  - `mapa_normativo.md` (mapa normativo consolidado)
   - `resumen_ejecutivo.md` (máximo una página)
 - **Recomendaciones:** cada recomendación es una acción concreta, priorizada y verificable,
   con qué hacer, responsable sugerido y cómo validar el cierre.
@@ -112,4 +126,4 @@ del auditor autorizado.
 - **Fuentes:** ante un conflicto, prevalecen `docs/alcance.md` (alcance y reglas de
   compromiso) y `docs/estimacion.md` (tallas, DoR y DoD).
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-26 | **Last Amended**: 2026-10-26
+**Version**: 1.0.1 | **Ratified**: 2026-10-26 | **Last Amended**: 2026-10-28
