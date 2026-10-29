@@ -1,0 +1,1 @@
+fixture ficticio: evidencia inventada para probar el validador. No es evidencia real.

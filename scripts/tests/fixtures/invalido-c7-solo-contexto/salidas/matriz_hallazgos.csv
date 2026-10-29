@@ -1,0 +1,2 @@
+id_hallazgo,enunciado,evidencias,severidad,control_iso,certeza_iso,recomendacion,prioridad,responsable_sugerido,criterio_cierre,estado_revision
+H-001,Servicio ficticio expuesto sin necesidad,EV-002,Media,A.8.20,Media,Deshabilitar el servicio ficticio,P2,Administrador del sistema,El servicio ficticio no aparece en una nueva evidencia,aprobado
