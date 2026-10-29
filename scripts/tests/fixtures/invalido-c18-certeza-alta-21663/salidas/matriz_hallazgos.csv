@@ -1,0 +1,2 @@
+id_hallazgo,enunciado,evidencias,severidad,control_iso,certeza_iso,recomendacion,prioridad,responsable_sugerido,criterio_cierre,estado_revision,controles_iso_adicionales,ley_21663_obligacion,ley_21663_articulo,ley_21663_certeza,ley_21719_obligacion,ley_21719_articulo,ley_21719_certeza
+H-001,Servicio ficticio expuesto sin necesidad,EV-900;EV-002,Media,A.8.20,Media,Deshabilitar el servicio ficticio,P2,Administrador del sistema,El servicio ficticio no aparece en una nueva evidencia,aprobado,A.8.9,medidas de seguridad,ARTICULO-FICTICIO,Alta,no aplica,—,Media
