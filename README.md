@@ -19,11 +19,28 @@ docs/
   meta_prompt.md          Meta-prompt reutilizable
   integracion_github.md   Instrucciones de integración con GitHub y el Project
   estimacion.md           Tallas, puntos, DoR, DoD y velocidad
+  plantillas/             Plantillas de inventarios, hallazgo (H-NNN.md) y matriz CSV
   referencias/            Material de referencia del curso
 evidencias/               Capturas y salidas de comandos (no se versionan: repo público)
 salidas/                  Inventarios, hallazgos, matriz y resumen ejecutivo
+scripts/
+  Test-Salidas.ps1        Validador de solo lectura de salidas/ (comprobaciones C1–C14)
+  tests/                  Runner Invoke-Pruebas.ps1 y fixtures ficticios del validador
+specs/                    Especificaciones Spec Kit (spec, plan, contratos, tareas)
 .github/                  Plantillas de issues y de pull request
 ```
+
+## Validación de las salidas
+
+El validador solo lee archivos locales: no usa la red ni ejecuta comandos contra sistemas.
+Termina con código 0 si no hay errores (los avisos no fallan) y con 1 si hay alguno.
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Test-Salidas.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/tests/Invoke-Pruebas.ps1
+```
+
+Contrato y lista de comprobaciones: [specs/001-analisis-evidencias/contracts/test-salidas.md](specs/001-analisis-evidencias/contracts/test-salidas.md).
 
 ## Gestión del trabajo
 
