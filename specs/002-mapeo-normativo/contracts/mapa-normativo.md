@@ -36,7 +36,7 @@ autorización de las pruebas (`docs/alcance.md`).
 |---|---|
 | Contiene la leyenda "no constituye dictamen jurídico" | FR-002, FR-012 |
 | Tabla ISO: una fila por control citado (principal o adicional), con los hallazgos que lo citan | FR-012 |
-| Tablas legales: una fila por obligación distinta de `no aplica`, con sus hallazgos | FR-012 |
+| Tablas legales: una fila por obligación distinta de `no aplica` (y, en la Ley 21.719, de `pendiente de vigencia`), con sus hallazgos | FR-012, FR-007 |
 | Los hallazgos de cada celda van ordenados y separados por `; ` | research R8 |
 | Ninguna fila sobra ni falta respecto de lo recalculado desde los hallazgos (el orden de las filas no importa) | FR-013 |
 | Existe la sección `## Ley 21.459` y menciona "autorización" | FR-008 |

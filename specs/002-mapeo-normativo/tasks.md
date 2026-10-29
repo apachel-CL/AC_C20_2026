@@ -51,7 +51,7 @@ números de artículo por su cuenta (FR-010).
   - Leyenda "> Mapeo orientativo; no constituye dictamen jurídico."
   - Subsecciones ISO/IEC 27001:2022, Ley 21.663 y Ley 21.719 con todas las claves del contrato.
   - Comentario con los enumerados: obligación 21.663 "`gestión de riesgos` | `medidas de seguridad` | `reporte de incidentes` | `no aplica`"; certezas "`Alta` | `Media` | `Baja`"; artículo "`verificar`, `—` si no aplica, o el de una fila `verificado`".
-  - Recordatorio: Ley 21.663 con "si la organización fuera entidad obligada" y certeza ≤ `Media` (Q1); Ley 21.719 con advertencia de vigencia; la Ley 21.459 no se mapea.
+  - Recordatorio: Ley 21.663 con "si la organización fuera entidad obligada" y certeza ≤ `Media` (Q1); Ley 21.719 `pendiente de vigencia` (con la obligación candidata en la justificación) mientras la entrada en vigor no esté verificada, y siempre con advertencia de vigencia; toda justificación con `[HECHO]` o `[INFERENCIA]` (FR-014); la Ley 21.459 no se mapea.
 
   [E4] [Talla: XS | 1 pts]
 
@@ -66,7 +66,7 @@ números de artículo por su cuenta (FR-010).
 - [ ] T004 Preparar `scripts/Test-Salidas.ps1` para 002 (`contracts/test-salidas-002.md`, research R4).
   - Constante `$script:ColumnasLegales` con las 7 columnas de FR-011.
   - En `Get-Contexto`: leer `verificacion_articulos.md` (tabla `| ID | Hallazgo | Ley | Obligación | Artículo | Estado | Fuente | Fecha | Comentario |`) y `mapa_normativo.md` (texto), y marcar en cada hallazgo si tiene sección `## Mapeo normativo`.
-  - Bandera `Activo002`: verdadera si algún hallazgo tiene la sección, la matriz tiene más de 11 columnas o existe alguno de los dos archivos nuevos.
+  - Banderas: `MatrizExtendida` (la matriz tiene más de 11 columnas) activa C15; `Activo002` (algún hallazgo tiene la sección o existe alguno de los dos archivos nuevos) activa C16–C22.
   - En C8/C12: aceptar 11 columnas o 18; si hay más de 11, C12 avisa solo por las columnas posteriores a la 18.
   - Resumen final con "hallazgos mapeados / no descartados".
   - Sin cambiar el resultado de ningún fixture de 001 (el runner sigue en 0).
@@ -76,13 +76,14 @@ números de artículo por su cuenta (FR-010).
   - procese solo hallazgos existentes y no `descartado` (FR-001);
   - use `docs/plantillas/mapeo_normativo.md`, `verificacion_articulos.md` y `mapa_normativo.md`;
   - confirme o corrija el control ISO principal, registre `Control ISO anterior` y `Motivo de corrección` y actualice `control_iso` de la matriz (FR-003);
-  - aplique Q1 (21.663 hipotética, certeza ≤ `Media`), la advertencia de vigencia de 21.719 y deje la 21.459 solo en el mapa (FR-006–FR-008);
+  - aplique Q1 (21.663 hipotética, certeza ≤ `Media`); registre la 21.719 como `pendiente de vigencia` (obligación candidata solo en la justificación) mientras la fila `entrada en vigor` no esté `verificado`, con la advertencia de vigencia y el criterio de "podría afectar datos personales" de FR-007; deje la 21.459 solo en el mapa (FR-006–FR-008);
+  - etiquete `[HECHO]` o `[INFERENCIA]` cada justificación (FR-014);
   - deje todo artículo en `verificar` y agregue su fila `pendiente` a la lista; prohíba inventar artículos y consultar fuentes externas (FR-010, FR-015);
-  - vuelva la Revisión a `pendiente` en todo hallazgo cuyo mapeo cree o modifique (FR-016);
+  - en todo hallazgo cuyo mapeo cree o modifique, vuelva la Revisión a `pendiente`, vacíe revisor y fecha, conserve el comentario como "Revisión previa:" y alinee `estado_revision` en la matriz (FR-016);
   - cierre con el validador y un resumen para el PR con las referencias pendientes (FR-017).
 
   [E4] [Talla: S | 2 pts]
-- [ ] T006 [P] Crear el fixture `scripts/tests/fixtures/valido-sin-mapeo/`: copia de `valido/` con la matriz en 18 columnas y las 7 legales vacías, sin sección de mapeo, sin lista ni mapa. Debe terminar con 0 sin ejecutar C15–C22 (compatibilidad con 001) [E4] [Talla: XS | 1 pts]
+- [ ] T006 [P] Crear el fixture `scripts/tests/fixtures/valido-sin-mapeo/`: copia de `valido/` con la matriz en 18 columnas y las 7 legales vacías, sin sección de mapeo, sin lista ni mapa. Debe terminar con 0, con `[OK] C15` (columnas legales vacías) y sin ejecutar C16–C22 (compatibilidad con 001) [E4] [Talla: XS | 1 pts]
 
 **Checkpoint**: validador listo para las comprobaciones de 002, prompt §2c y caso de
 compatibilidad.
@@ -106,7 +107,7 @@ justificación, y la matriz con `control_iso` y `controles_iso_adicionales` cohe
 
   [E4] [Talla: M | 3 pts]
 - [ ] T008 [US1] Implementar en `scripts/Test-Salidas.ps1` la parte ISO de C16 y C17.
-  - **C16 (ISO):** la sección contiene "no constituye dictamen jurídico"; `Controles ISO adicionales`, `Control ISO anterior`, `Motivo de corrección` y `Justificación ISO` presentes y no vacíos.
+  - **C16 (ISO):** la sección contiene "no constituye dictamen jurídico"; `Controles ISO adicionales`, `Control ISO anterior`, `Motivo de corrección` y `Justificación ISO` presentes y no vacíos; `Justificación ISO` contiene `[HECHO]` o `[INFERENCIA]` (FR-014).
   - **C17:** todo control (principal y adicionales) cumple `^A\.\d{1,2}\.\d{1,2}$` y está en el Anexo A 2022: "`A.5.1`–`A.5.37`, `A.6.1`–`A.6.8`, `A.7.1`–`A.7.14` y `A.8.1`–`A.8.34`" (research R3); el principal también admite `verificar`; los adicionales no repiten el principal ni se repiten entre sí; si `Control ISO anterior` es `—`, `Motivo de corrección` es `confirmado`.
 
   [E4] [Talla: S | 2 pts]
@@ -130,13 +131,13 @@ mapeado tiene la frase hipotética de Q1 y el validador termina con 0 (SC-002, S
 
 ### Validación de US2
 
-- [ ] T011 [US2] Ampliar C16 en `scripts/Test-Salidas.ps1` con la parte legal: las claves `Ley 21.663 obligación|artículo|certeza|justificación` y `Ley 21.719 obligación|artículo|certeza|justificación|vigencia` presentes; `Ley 21.663 obligación` ∈ "`gestión de riesgos` | `medidas de seguridad` | `reporte de incidentes` | `no aplica`"; certezas ∈ "`Alta` | `Media` | `Baja`"; justificaciones no vacías; artículo = `—` si la obligación es `no aplica` (FR-005, FR-007, FR-010) [E4] [Talla: S | 2 pts]
+- [ ] T011 [US2] Ampliar C16 en `scripts/Test-Salidas.ps1` con la parte legal: las claves `Ley 21.663 obligación|artículo|certeza|justificación` y `Ley 21.719 obligación|artículo|certeza|justificación|vigencia` presentes; `Ley 21.663 obligación` ∈ "`gestión de riesgos` | `medidas de seguridad` | `reporte de incidentes` | `no aplica`"; `Ley 21.719 obligación` ∈ "`no aplica` | `pendiente de vigencia` | texto libre"; certezas ∈ "`Alta` | `Media` | `Baja`"; justificaciones no vacías y con `[HECHO]` o `[INFERENCIA]` (FR-014); artículo = `—` si la obligación es `no aplica` y `verificar` si es `pendiente de vigencia` (FR-005, FR-007, FR-010) [E4] [Talla: S | 2 pts]
 - [ ] T012 [US2] Implementar C18 y C20 en `scripts/Test-Salidas.ps1`.
-  - **C18:** si `Ley 21.663 obligación` ≠ `no aplica`, certeza ≤ `Media` y la justificación contiene "si la organización fuera entidad obligada" (Q1); si `Ley 21.719 obligación` ≠ `no aplica`, `Ley 21.719 vigencia` no vacía y certeza ≤ `Media` salvo que la fila `entrada en vigor` de la lista esté `verificado` (FR-007).
+  - **C18:** si `Ley 21.663 obligación` ≠ `no aplica`, certeza ≤ `Media` y la justificación contiene "si la organización fuera entidad obligada" (Q1); si `Ley 21.719 obligación` ≠ `no aplica`, `Ley 21.719 vigencia` no vacía; si la fila `entrada en vigor` de la lista no está `verificado`, la obligación MUST ser `pendiente de vigencia` (FR-007, constitución V).
   - **C20:** ninguna clave de la sección ni valor de obligación menciona `21.459`, y ninguna fila de la lista tiene `Ley = 21.459` (FR-008, SC-004).
 
   [E4] [Talla: S | 2 pts]
-- [ ] T013 [P] [US2] Completar en `scripts/tests/fixtures/valido/` el mapeo legal de H-001 (21.663 `medidas de seguridad` con la frase de Q1, certeza `Media`, artículo `verificar`; 21.719 `no aplica`) y crear `invalido-c16-obligacion-invalida/`, `invalido-c18-certeza-alta-21663/`, `invalido-c18-sin-frase-hipotetica/`, `invalido-c18-21719-sin-vigencia/` e `invalido-c20-ley-21459/` [E4] [Talla: S | 2 pts]
+- [ ] T013 [P] [US2] Completar en `scripts/tests/fixtures/valido/` el mapeo legal de H-001 (21.663 `medidas de seguridad` con la frase de Q1, certeza `Media`, artículo `verificar`; 21.719 `no aplica`) y crear `invalido-c16-obligacion-invalida/`, `invalido-c18-certeza-alta-21663/`, `invalido-c18-sin-frase-hipotetica/`, `invalido-c18-21719-citada-sin-vigencia/` (obligación 21.719 de texto libre con la fila `entrada en vigor` en `pendiente`) e `invalido-c20-ley-21459/` [E4] [Talla: S | 2 pts]
 
 ### Ejecución del flujo en US2
 
@@ -165,12 +166,12 @@ verificarse y un mapa normativo coherente con los hallazgos.
   - Estructura y enumerados de la tabla; IDs `VA-NNN` únicos.
   - `verificado` ⇒ `Fuente` no vacía, `Fecha` `^\d{4}-\d{2}-\d{2}$` y `Artículo` ≠ `verificar`; `descartado` ⇒ `Comentario` no vacío.
   - `Hallazgo` existe y no está `descartado`, o es `—` solo con `Obligación = entrada en vigor`.
-  - Cobertura: exactamente una fila por par (hallazgo, ley) con obligación ≠ `no aplica`, con la misma obligación; fila `entrada en vigor` si algún hallazgo mapea la 21.719.
+  - Cobertura: exactamente una fila por par (hallazgo, ley) con obligación ≠ `no aplica` y ≠ `pendiente de vigencia`, con la misma obligación; fila `entrada en vigor` si algún hallazgo tiene obligación 21.719 ≠ `no aplica`.
   - Citación (FR-010): el artículo del hallazgo y de la matriz es `—`, `verificar` o igual al de su fila `verificado`.
 
   [E4] [Talla: M | 3 pts]
 - [ ] T018 [US3] Implementar C21 y C22 en `scripts/Test-Salidas.ps1`.
-  - **C21:** recalcular desde los hallazgos mapeados y no descartados las tres tablas del mapa (controles principal y adicionales; obligaciones ≠ `no aplica`), con hallazgos ordenados y separados por `; `, y compararlas con `mapa_normativo.md` sin importar el orden de las filas; exigir la leyenda y la sección `## Ley 21.459` con la palabra "autorización".
+  - **C21:** recalcular desde los hallazgos mapeados y no descartados las tres tablas del mapa (controles principal y adicionales; obligaciones ≠ `no aplica` y ≠ `pendiente de vigencia`), con hallazgos ordenados y separados por `; `, y compararlas con `mapa_normativo.md` sin importar el orden de las filas; exigir la leyenda y la sección `## Ley 21.459` con la palabra "autorización".
   - **C22:** `[AVISO]` con la cantidad de filas `pendiente` de la lista; agregar al resumen final los conteos `pendiente` / `verificado` / `descartado`.
 
   [E4] [Talla: M | 3 pts]
@@ -189,9 +190,9 @@ lleva de vuelta a la evidencia.
 
 **Purpose**: documentación, medición y cierre con revisión humana.
 
-- [ ] T021 [P] Actualizar `specs/001-analisis-evidencias/contracts/test-salidas.md` (nota: C12 avisa solo después de la columna 18 cuando la matriz tiene columnas legales; ver `specs/002-mapeo-normativo/contracts/test-salidas-002.md`) y la sección de validación de `README.md` con C15–C22 y los dos archivos nuevos de `salidas/` [E4] [Talla: XS | 1 pts]
-- [ ] T022 Ejecutar los escenarios 0 y 4 de `specs/002-mapeo-normativo/quickstart.md` (y 1–3 si hay hallazgos reales). Medir con `Measure-Command` el validador sobre `salidas/` y sobre `scripts/tests/fixtures/valido/` (meta < 5 s). Pegar el resultado, dudas y supuestos en la descripción del PR (FR-017) [E4] [Talla: S | 2 pts]
-- [ ] T023 Revisión humana: el auditor verifica en la fuente oficial cada fila de `salidas/verificacion_articulos.md` (artículo, fuente, fecha, o `descartado` con motivo), incluida la entrada en vigor de la Ley 21.719; copia los artículos verificados a los hallazgos y a la matriz; revisa el mapeo y completa el bloque Revisión de cada `H-NNN.md`. Abrir el PR contra `main` con el checklist de la DoD y `Closes #n` de los issues cubiertos [requiere al auditor] (#21) [E4] [Talla: S | 2 pts]
+- [ ] T021 [P] Actualizar `specs/001-analisis-evidencias/contracts/test-salidas.md` (nota: C12 avisa solo después de la columna 18 cuando la matriz tiene columnas legales; ver `specs/002-mapeo-normativo/contracts/test-salidas-002.md`), la transición `aprobado | corregido → pendiente` (FR-016 de 002) en `specs/001-analisis-evidencias/data-model.md`, y la sección de validación de `README.md` con C15–C22 y los dos archivos nuevos de `salidas/` [E4] [Talla: XS | 1 pts]
+- [ ] T022 Ejecutar los escenarios 0 y 4 de `specs/002-mapeo-normativo/quickstart.md` (y 1–3 si hay hallazgos reales). Medir con `Measure-Command` el validador sobre `salidas/` y sobre `scripts/tests/fixtures/valido/` (meta < 5 s) y, si hay hallazgos reales, el recorrido manual de SC-006 (mapa → hallazgo → evidencia, meta < 3 min). Pegar el resultado, dudas y supuestos en la descripción del PR (FR-017) [E4] [Talla: S | 2 pts]
+- [ ] T023 Revisión humana: el auditor verifica en la fuente oficial cada fila de `salidas/verificacion_articulos.md` (artículo, fuente, fecha, o `descartado` con motivo; si el artículo difiere del propuesto, el motivo en `Comentario`), incluida la entrada en vigor de la Ley 21.719, y pasa a obligación registrada toda 21.719 `pendiente de vigencia` si la vigencia quedó verificada; copia los artículos verificados a los hallazgos y a la matriz; revisa el mapeo y completa el bloque Revisión de cada `H-NNN.md`. Abrir el PR contra `main` con el checklist de la DoD y `Closes #n` de los issues cubiertos [requiere al auditor] (#21) [E4] [Talla: S | 2 pts]
 
 ---
 

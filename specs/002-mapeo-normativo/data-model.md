@@ -24,10 +24,10 @@ Recomendación, Revisión) no cambian, salvo el control ISO principal (R2).
 
 | Campo | Ley 21.663 | Ley 21.719 |
 |---|---|---|
-| `obligacion` | `gestión de riesgos` · `medidas de seguridad` · `reporte de incidentes` · `no aplica` | texto libre o `no aplica` |
-| `articulo` | `verificar`, `—` (si no aplica) o el artículo de una fila `verificado` | igual |
-| `certeza` | `Alta` · `Media` · `Baja`; siempre ≤ `Media` (Q1) | ≤ `Media` mientras la entrada en vigor no esté verificada |
-| `justificacion` | contiene "si la organización fuera entidad obligada"; [INFERENCIA] | [INFERENCIA]; si `no aplica`, por qué |
+| `obligacion` | `gestión de riesgos` · `medidas de seguridad` · `reporte de incidentes` · `no aplica` | `no aplica` · `pendiente de vigencia` · texto libre (solo si la entrada en vigor está `verificado`) |
+| `articulo` | `verificar`, `—` (si no aplica) o el artículo de una fila `verificado` | igual; `verificar` si `pendiente de vigencia` |
+| `certeza` | `Alta` · `Media` · `Baja`; siempre ≤ `Media` (Q1) | `Alta` · `Media` · `Baja` |
+| `justificacion` | [HECHO] o [INFERENCIA]; si `obligacion ≠ no aplica`, contiene "si la organización fuera entidad obligada" | [HECHO] o [INFERENCIA]; si `no aplica`, por qué; si `pendiente de vigencia`, la obligación candidata |
 | `vigencia` | — | advertencia de vigencia diferida, obligatoria si `obligacion ≠ no aplica` |
 
 **Ley 21.459**: no es un campo del hallazgo (FR-008). Solo aparece en el mapa normativo.
@@ -57,7 +57,10 @@ pendiente ──▶ verificado | descartado
 ```
 
 **Cardinalidad**: exactamente una fila por par (hallazgo, ley) con obligación distinta de
-`no aplica`, más una fila de entrada en vigor si algún hallazgo mapea la Ley 21.719.
+`no aplica` y de `pendiente de vigencia`, más una fila de entrada en vigor si algún hallazgo
+tiene una obligación 21.719 distinta de `no aplica`.
+
+**Artículo verificado distinto del propuesto**: el auditor anota el motivo en `comentario`.
 
 ## Mapa normativo
 
@@ -68,7 +71,7 @@ y con sección de mapeo.
 |---|---|---|
 | ISO | cada control (principal o adicional) | hallazgos que lo citan, separados por `; ` |
 | Ley 21.663 | cada obligación distinta de `no aplica` | hallazgos |
-| Ley 21.719 | cada obligación distinta de `no aplica` | hallazgos |
+| Ley 21.719 | cada obligación distinta de `no aplica` y de `pendiente de vigencia` | hallazgos |
 
 Más la leyenda y la sección "Ley 21.459".
 
@@ -92,6 +95,8 @@ Las 7 columnas van vacías si el hallazgo no tiene sección de mapeo o está `de
 
 ```
 sin mapeo ──(flujo §2c)──▶ mapeado, Revisión = pendiente ──(auditor)──▶ aprobado | corregido
+aprobado | corregido ──(flujo §2c, al cambiar el mapeo)──▶ pendiente
 ```
 
-Toda modificación posterior del mapeo vuelve la Revisión a `pendiente` (FR-016).
+La segunda transición amplía las de 001 (FR-016): el flujo vacía `Revisor` y `Fecha`, conserva
+el comentario con el prefijo "Revisión previa:" y alinea `estado_revision` en la matriz.

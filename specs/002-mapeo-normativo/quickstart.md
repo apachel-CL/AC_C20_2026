@@ -15,7 +15,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/tests/Invoke-Pruebas
 
 **Esperado:**
 - los fixtures de 001 siguen dando el mismo código;
-- `valido-sin-mapeo/` (matriz de 18 columnas con las legales vacías) termina con 0 y sin C15–C21;
+- `valido-sin-mapeo/` (matriz de 18 columnas con las legales vacías) termina con 0, con
+  `[OK] C15` y sin C16–C22;
 - `valido/` (H-001 mapeado, lista y mapa) termina con 0;
 - cada `invalido-c15…c21-*` termina con 1 y reporta su comprobación;
 - el aviso C22 aparece en el fixture con referencias pendientes, con código 0;
@@ -28,7 +29,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/tests/Invoke-Pruebas
    - tiene la sección "Mapeo normativo" con la leyenda;
    - `Control ISO` es un control del Anexo A 2022 o `verificar`, con justificación;
    - la Ley 21.663 dice "si la organización fuera entidad obligada" y su certeza es ≤ `Media`;
-   - la Ley 21.719 es `no aplica` o lleva la advertencia de vigencia;
+   - la Ley 21.719 es `no aplica` o `pendiente de vigencia` con su advertencia (no se cita
+     mientras la entrada en vigor no esté verificada);
+   - cada justificación lleva [HECHO] o [INFERENCIA];
    - los artículos están en `verificar`;
    - el bloque Revisión está en `pendiente`.
 3. Revisa que `salidas/matriz_hallazgos.csv` tenga 18 columnas y que las 11 primeras no
@@ -55,6 +58,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/tests/Invoke-Pruebas
    sección "Ley 21.459" la ubica como marco de la autorización.
 2. Agrega a mano una fila que no corresponda a ningún hallazgo. **Esperado:** falla C21.
 3. Agrega una fila de la Ley 21.459 en la lista de verificación. **Esperado:** falla C20.
+4. Mide el recorrido de SC-006: parte de una fila del mapa, abre el hallazgo y llega a la
+   evidencia citada en el inventario. **Esperado:** menos de 3 minutos; anota el tiempo en el PR.
 
 ## Escenario 4 — Regla de no ejecución
 

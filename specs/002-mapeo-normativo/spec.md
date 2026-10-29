@@ -71,20 +71,24 @@ queda `verificar`. Todo el mapeo legal se etiqueta como orientativo, no como dic
 ISO (P1) para ubicar la debilidad y tiene más riesgo de error, por eso va segundo.
 
 **Independent Test**: con un hallazgo ficticio, el flujo agrega la obligación 21.663 con
-certeza, marca 21.719 como "no aplica" o con su advertencia de vigencia, deja los artículos en
-`verificar`, y la matriz recibe las columnas legales al final sin alterar las 11 de 001.
+certeza, marca 21.719 como `no aplica` o `pendiente de vigencia` con su advertencia, deja los
+artículos en `verificar`, y la matriz recibe las columnas legales al final sin alterar las 11 de 001.
 
 **Acceptance Scenarios**:
 
 1. **Given** un hallazgo sin datos personales involucrados, **When** se mapea, **Then** la
    Ley 21.719 queda "no aplica" con justificación [INFERENCIA].
-2. **Given** un hallazgo que expone un servicio con posibles datos personales, **When** se
-   mapea, **Then** la Ley 21.719 registra la obligación, la advertencia de vigencia diferida y
-   certeza no mayor que `Media` mientras la vigencia no esté verificada.
+2. **Given** un hallazgo que expone un servicio con posibles datos personales y la entrada en
+   vigor de la Ley 21.719 sin verificar, **When** se mapea, **Then** la Ley 21.719 queda
+   `pendiente de vigencia` con la obligación candidata en la justificación, y la fila
+   `entrada en vigor` queda `pendiente` en la lista.
 3. **Given** que el auditor no verificó un artículo, **When** se mapea, **Then** el artículo
    queda `verificar` y entra en la lista de verificación de artículos.
 4. **Given** cualquier hallazgo, **When** se mapea, **Then** la Ley 21.459 no aparece como
    obligación del hallazgo.
+5. **Given** la fila `entrada en vigor` está `verificado`, **When** se vuelve a mapear, **Then**
+   la obligación candidata de la Ley 21.719 pasa a ser la obligación registrada y entra al mapa
+   normativo.
 
 ---
 
@@ -131,8 +135,8 @@ coinciden. El mapa normativo lista ese hallazgo bajo su control y su obligación
   en forma hipotética, con certeza no mayor que `Media` y [INFERENCIA] (FR-006).
 - **Matriz con las columnas legales en otro orden o intercaladas con las de 001:** se informa
   como error; las 11 columnas de 001 siempre van primero y en su orden.
-- **El auditor verifica un artículo distinto del propuesto:** prevalece el verificado y la
-  lista conserva el motivo del cambio.
+- **El auditor verifica un artículo distinto del propuesto:** prevalece el verificado y el
+  auditor anota el motivo del cambio en el `Comentario` de la fila.
 - **Referencia legal que resulta no aplicable al verificarla:** se marca "descartada" con motivo
   en la lista y el hallazgo vuelve a `verificar` o "no aplica", según corresponda.
 
@@ -142,8 +146,8 @@ coinciden. El mapa normativo lista ese hallazgo bajo su control y su obligación
 
 - **FR-001**: El flujo MUST procesar solo hallazgos existentes de la funcionalidad 001 en estado
   distinto de `descartado`. No crea hallazgos ni evidencias nuevas, y la cadena Observación →
-  Evidencia → Hallazgo → Recomendación de 001 no se modifica salvo el control ISO principal
-  (FR-003).
+  Evidencia → Hallazgo → Recomendación de 001 no se modifica salvo `Control ISO` y
+  `Certeza ISO` (FR-003) y el bloque Revisión (FR-016).
 - **FR-002**: Cada hallazgo mapeado MUST incluir una sección "Mapeo normativo", con:
   - mapeo ISO (FR-003, FR-004);
   - mapeo Ley 21.663 (FR-005, FR-006);
@@ -160,13 +164,21 @@ coinciden. El mapa normativo lista ese hallazgo bajo su control y su obligación
   justificación. El artículo se cita solo si está verificado (FR-009); si no, `verificar`.
 - **FR-006**: La aplicabilidad de la Ley 21.663 MUST evaluarse en forma hipotética: "si la
   organización dueña del activo fuera entidad obligada" (prestadora de servicios esenciales u
-  operador de importancia vital). Cada mapeo 21.663 MUST incluir esa frase, etiquetarse
-  [INFERENCIA] y tener certeza no mayor que `Media`, porque `docs/alcance.md` no define el tipo
+  operador de importancia vital). Cada mapeo 21.663 distinto de `no aplica` MUST incluir
+  esa frase, etiquetarse [INFERENCIA] y tener certeza no mayor que `Media`, porque `docs/alcance.md` no define el tipo
   de organización.
 - **FR-007**: El mapeo de la Ley 21.719 MUST ser `no aplica` (con justificación) si el hallazgo
-  no afecta datos personales. Si los afecta o podría afectarlos, MUST indicar la obligación, la
-  advertencia de vigencia diferida y una certeza no mayor que `Media` mientras la entrada en
-  vigor no esté verificada en la lista de verificación.
+  no afecta datos personales. "Podría afectarlos" significa que el hallazgo expone un servicio o
+  información que típicamente trata datos personales (base de datos, directorio o servicio de
+  usuarios, correo, archivos compartidos o aplicación web con cuentas), y se etiqueta
+  [INFERENCIA]. Si los afecta o podría afectarlos:
+  - mientras la fila `entrada en vigor` de la lista de verificación no esté `verificado`, la
+    obligación MUST registrarse como `pendiente de vigencia`, con la obligación candidata solo en
+    la justificación, y MUST NOT aparecer en el mapa normativo ni como obligación en la matriz
+    (constitución, principio V: la vigencia se verifica antes de citar la ley);
+  - cuando esa fila esté `verificado`, se registra la obligación, con certeza según la evidencia.
+
+  En ambos casos el hallazgo lleva la advertencia de vigencia diferida.
 - **FR-008**: La Ley 21.459 MUST NOT mapearse como obligación ni control de un hallazgo. Se
   menciona solo en el mapa normativo, como marco de la autorización de las pruebas
   (`docs/alcance.md`).
@@ -192,6 +204,7 @@ coinciden. El mapa normativo lista ese hallazgo bajo su control y su obligación
   - que ningún artículo aparezca sin su fila `verificado` en la lista (FR-010);
   - que `verificado` tenga fuente y fecha;
   - que ningún hallazgo mapee la Ley 21.459 como obligación;
+  - que cada justificación del mapeo lleve [HECHO] o [INFERENCIA] (FR-014);
   - que el mapa normativo y la matriz sean coherentes.
 
   Las comprobaciones de 001 siguen vigentes. Con la funcionalidad 002 activa, las columnas
@@ -201,8 +214,10 @@ coinciden. El mapa normativo lista ese hallazgo bajo su control y su obligación
 - **FR-015**: El flujo MUST NOT ejecutar comandos contra sistemas ni consultar fuentes externas
   por su cuenta: la verificación de artículos la hace el auditor (constitución, principio IV).
 - **FR-016**: Un cambio en el mapeo de un hallazgo con revisión `aprobado` o `corregido` MUST
-  volver su bloque "Revisión" a `pendiente` hasta que el auditor lo revise de nuevo
-  (constitución, principio VII).
+  volver su bloque "Revisión" a `pendiente`, vaciar `Revisor` y `Fecha`, conservar el comentario
+  anterior con el prefijo "Revisión previa:" y alinear `estado_revision` en la matriz. Es la única
+  transición que el flujo hace sobre la Revisión y amplía FR-014 de 001: en el resto, solo el
+  auditor cambia el estado (constitución, principio VII).
 - **FR-017**: Al terminar, el flujo MUST resumir lo mapeado, la cantidad de referencias
   pendientes de verificación y las dudas y supuestos, para la descripción del PR.
 
@@ -214,7 +229,7 @@ coinciden. El mapa normativo lista ese hallazgo bajo su control y su obligación
   - certeza;
   - justificación.
 - **Mapeo legal**: pertenece a un hallazgo, uno por ley (21.663 y 21.719). Atributos:
-  - obligación (categoría) o "no aplica";
+  - obligación (categoría), "no aplica" o, en la 21.719, "pendiente de vigencia";
   - artículo verificado o `verificar`;
   - certeza;
   - justificación;
@@ -241,8 +256,9 @@ coinciden. El mapa normativo lista ese hallazgo bajo su control y su obligación
 - **SC-003**: Hay 0 artículos citados en hallazgos o en la matriz sin una fila `verificado`
   con fuente y fecha en la lista de verificación.
 - **SC-004**: Hay 0 hallazgos que mapeen la Ley 21.459 como obligación.
-- **SC-005**: Las 11 primeras columnas de la matriz son idénticas a las de 001, y el 100 % de
-  las columnas legales coincide con su hallazgo.
+- **SC-005**: El encabezado de las 11 primeras columnas de la matriz es idéntico al de 001; sus
+  valores solo cambian en `control_iso`, `certeza_iso` (FR-003) y `estado_revision` (FR-016), y
+  el 100 % de las columnas legales coincide con su hallazgo.
 - **SC-006**: Partiendo de cualquier control u obligación del mapa normativo, el auditor llega
   a la evidencia de origen en menos de 3 minutos.
 - **SC-007**: El 100 % de los hallazgos con mapeo modificado después de su aprobación vuelve a
@@ -257,8 +273,8 @@ coinciden. El mapa normativo lista ese hallazgo bajo su control y su obligación
   ISO. Claude propone categorías de obligación y controles a partir de su conocimiento, siempre
   con certeza y [INFERENCIA]; los números de artículo solo los fija el auditor tras consultar la
   fuente oficial.
-- **Ley 21.719.** Su vigencia es diferida (`docs/alcance.md`); hasta verificarla, ninguna
-  obligación de esa ley se presenta como exigible.
+- **Ley 21.719.** Su vigencia es diferida (`docs/alcance.md`); hasta verificarla, sus
+  obligaciones quedan `pendiente de vigencia` y no se citan (FR-007).
 - **Ley 21.459.** No es un control de seguridad: delimita la autorización de las pruebas
   (constitución, sección de restricciones).
 - **Datos del laboratorio.** Los datos del activo son ficticios; "afecta datos personales" se

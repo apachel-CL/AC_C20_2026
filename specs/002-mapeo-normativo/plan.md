@@ -53,9 +53,9 @@ el auditor cierra, un mapa normativo consolidado y 7 columnas legales al final d
 | II. Trazabilidad | El mapa normativo lleva de control/obligación a hallazgo y de ahí a evidencia (C21) | ✅ |
 | III. Veracidad | Artículos solo con fila `verificado` (C19); controles ISO contra la lista del Anexo A 2022 (C17); [INFERENCIA] en todo mapeo legal | ✅ |
 | IV. No ejecución | El validador sigue sin red; la verificación de artículos la hace el auditor | ✅ |
-| V. Protección de datos y alcance legal | Leyenda "no constituye dictamen jurídico" obligatoria (C16); certeza ≤ `Media` para 21.663 (Q1) y para 21.719 sin vigencia verificada (C18); 21.459 nunca como obligación (C20) | ✅ |
+| V. Protección de datos y alcance legal | Leyenda "no constituye dictamen jurídico" obligatoria (C16); certeza ≤ `Media` para 21.663 (Q1); 21.719 queda `pendiente de vigencia` y no se cita hasta verificar su entrada en vigor (C18, C21); 21.459 nunca como obligación (C20) | ✅ |
 | VI. Gestión ágil | Tareas con tallas en `/speckit-tasks`; ninguna XL | ✅ (se verifica en tasks) |
-| VII. Revisión humana | Mapear un hallazgo aprobado lo vuelve a `pendiente` (FR-016, prompt + DoD) | ✅ |
+| VII. Revisión humana | Mapear un hallazgo aprobado lo vuelve a `pendiente` (FR-016, prompt + DoD); es la única transición que hace el flujo | ✅ |
 
 **Re-check después de la Fase 1:** sin violaciones. FR-016 no se puede comprobar con un
 validador sin historial; se cubre con el prompt y el checklist del PR (research R6). No hace

@@ -52,9 +52,10 @@ las decisiones de diseño derivadas.
 ## R5. Lista de verificación de artículos
 
 - **Decision**: `salidas/verificacion_articulos.md` con una tabla `VA-NNN`. Cada referencia
-  legal (hallazgo × ley con obligación distinta de `no aplica`) tiene exactamente una fila. La
-  entrada en vigor de la Ley 21.719 es una fila con hallazgo `—` y obligación
-  `entrada en vigor`, que existe si algún hallazgo mapea esa ley.
+  legal (hallazgo × ley con obligación distinta de `no aplica` y de `pendiente de vigencia`)
+  tiene exactamente una fila. La entrada en vigor de la Ley 21.719 es una fila con hallazgo `—`
+  y obligación `entrada en vigor`, que existe si algún hallazgo tiene una obligación 21.719
+  distinta de `no aplica`.
 - **Rationale**: el auditor tiene un único lugar para trabajar las verificaciones y el
   validador puede exigir fuente y fecha a cada `verificado`.
 - **Regla de citación**: el campo artículo del hallazgo vale `verificar` mientras la fila esté
@@ -63,8 +64,9 @@ las decisiones de diseño derivadas.
 
 ## R6. Volver a revisión al cambiar el mapeo (FR-016)
 
-- **Decision**: el prompt de §2c pone `Estado: pendiente` (y vacía revisor y fecha) en todo
-  hallazgo cuyo mapeo crea o modifica. La plantilla de PR agrega el ítem "Mapeo normativo
+- **Decision**: el prompt de §2c pone `Estado: pendiente`, vacía revisor y fecha, conserva el
+  comentario con el prefijo "Revisión previa:" y alinea `estado_revision` en todo hallazgo cuyo
+  mapeo crea o modifica. Es una transición nueva respecto de 001 (FR-016). La plantilla de PR agrega el ítem "Mapeo normativo
   revisado por el auditor en cada H-NNN.md tocado".
 - **Rationale**: el validador lee un solo estado de los archivos y no tiene historial; comparar
   contra git agregaría ejecución de procesos (prohibido en el contrato de 001).
@@ -76,9 +78,12 @@ las decisiones de diseño derivadas.
 - **Decision**:
   - Ley 21.663: certeza ≤ `Media` siempre y justificación que contenga la frase "si la
     organización fuera entidad obligada" (Q1).
-  - Ley 21.719 distinta de `no aplica`: certeza ≤ `Media` mientras la fila de entrada en vigor
-    no esté `verificado`, y campo `Ley 21.719 vigencia` con la advertencia.
-- **Rationale**: es comprobable por texto y aplica la constitución (V).
+  - Ley 21.719 distinta de `no aplica`: campo `Ley 21.719 vigencia` con la advertencia y, mientras
+    la fila de entrada en vigor no esté `verificado`, obligación `pendiente de vigencia` (la
+    candidata va en la justificación y no entra al mapa ni a la matriz).
+- **Rationale**: es comprobable por texto y aplica la constitución (V), que exige verificar la
+  vigencia de la Ley 21.719 antes de citarla. Una primera versión solo limitaba la certeza a
+  `Media`; `/speckit-analyze` (D1) la marcó como incumplimiento de ese MUST.
 
 ## R8. Mapa normativo
 

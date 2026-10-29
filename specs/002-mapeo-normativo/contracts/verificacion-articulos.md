@@ -24,6 +24,7 @@ UTF-8. Un título `#` y **una** tabla con estos encabezados exactos, en este ord
 | `Estado`: `pendiente` \| `verificado` \| `descartado` | FR-009 |
 | `verificado` ⇒ `Fuente` no vacía, `Fecha` `AAAA-MM-DD` y `Artículo` distinto de `verificar` | FR-009 |
 | `descartado` ⇒ `Comentario` no vacío | spec, casos borde |
-| Exactamente una fila por par (hallazgo, ley) cuya obligación no es `no aplica` | research R5 |
-| Si algún hallazgo mapea la Ley 21.719, existe la fila `entrada en vigor` | FR-007, FR-009 |
+| Exactamente una fila por par (hallazgo, ley) cuya obligación no es `no aplica` ni `pendiente de vigencia` | research R5 |
+| Si algún hallazgo tiene una obligación 21.719 distinta de `no aplica`, existe la fila `entrada en vigor` | FR-007, FR-009 |
+| Si el artículo verificado difiere del propuesto, el auditor anota el motivo en `Comentario` (regla del flujo; el validador no conoce el artículo propuesto) | spec, casos borde |
 | La `Obligación` de la fila coincide con la del hallazgo | FR-009 |

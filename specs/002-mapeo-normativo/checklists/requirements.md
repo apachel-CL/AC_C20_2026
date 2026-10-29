@@ -42,3 +42,13 @@
   comprueba, no cómo.
 - **Sin artículos en la spec.** A propósito no se citan números de artículo: la spec exige que
   los fije el auditor tras verificarlos (FR-010).
+- **Iteración 3 (`/speckit-analyze`).** Se resolvieron los 11 hallazgos del análisis:
+  - D1 (CRITICAL, principio V): la Ley 21.719 queda `pendiente de vigencia` y no se cita hasta
+    verificar su entrada en vigor (FR-007, C18, C21);
+  - I1: C15 se activa con la matriz extendida y C16–C22 con el mapeo, la lista o el mapa;
+  - I2: FR-016 define la transición `aprobado | corregido → pendiente` como excepción a FR-014
+    de 001;
+  - A1 (SC-005), A2 (criterio de "podría afectar datos personales"), U1 (excepciones de FR-001),
+    C1 ([HECHO]/[INFERENCIA] en C16 y en el prompt), C2 (medición de SC-006), L1 (frase
+    hipotética solo si no es `no aplica`) y L2 (motivo en `Comentario`).
+  - L3 (salidas en la constitución) queda para una enmienda aparte.
