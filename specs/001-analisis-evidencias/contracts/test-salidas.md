@@ -40,9 +40,12 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Test-Salidas.ps1 [-R
 | C9 | Correspondencia 1:1 entre filas de la matriz y archivos, con columnas coincidentes | error | FR-010 |
 | C10 | Revisión: `Revisor` y `Fecha` presentes si el estado no es `pendiente` | error | FR-014, SC-008 |
 | C11 | Patrones de secretos en claro (`password=`, `pass:`, `$1$`, `$6$`, `BEGIN … PRIVATE KEY`, cadenas hexadecimales de 32 o más caracteres después de `hash`) | aviso | FR-013, SC-006 |
-| C12 | Columnas adicionales en la matriz | aviso | contrato de la matriz |
+| C12 | Columnas adicionales en la matriz (con las columnas legales de 002, solo las posteriores a la 18) | aviso | contrato de la matriz |
 | C13 | `Prioridad` distinta de la derivada de la severidad (el auditor puede ajustarla) | aviso | FR-009 |
 | C14 | `Comandos propuestos` menciona una IPv4 distinta de `192.168.56.101` | aviso | FR-012 |
+
+**Funcionalidad 002:** el mismo script agrega C15–C22 (mapeo normativo); ver
+`specs/002-mapeo-normativo/contracts/test-salidas-002.md`.
 
 **C11 y la Definition of Done:** C11 es heurística y no falla, pero un `[AVISO]` C11 sobre
 `salidas/` bloquea el PR hasta que el auditor enmascare el dato o justifique el falso positivo

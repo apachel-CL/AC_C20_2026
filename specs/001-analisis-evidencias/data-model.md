@@ -101,7 +101,11 @@ Va embebida en el hallazgo.
 ```
 pendiente ──(auditor)──▶ aprobado | corregido | descartado
 corregido ──(auditor)──▶ aprobado
+aprobado | corregido ──(flujo de 002, al cambiar el mapeo normativo)──▶ pendiente
 ```
+
+- La última transición la agrega la funcionalidad 002 (FR-016 de
+  `specs/002-mapeo-normativo/spec.md`): es la única que hace el flujo sobre la Revisión.
 
 - **Cerrado** = `aprobado` o `corregido` (FR-014).
 - **`descartado`** es un estado final: el hallazgo se conserva en su archivo y en la matriz, y
