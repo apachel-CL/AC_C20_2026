@@ -47,6 +47,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Test-Salidas.ps1 [-R
 **Funcionalidad 002:** el mismo script agrega C15–C22 (mapeo normativo); ver
 `specs/002-mapeo-normativo/contracts/test-salidas-002.md`.
 
+**Funcionalidad 003:** agrega C23–C28 (error) y C29 (aviso) sobre el plan de remediación y
+el resumen ejecutivo; ver `specs/003-informe-remediacion/contracts/test-salidas-003.md`.
+
 **C11 y la Definition of Done:** C11 es heurística y no falla, pero un `[AVISO]` C11 sobre
 `salidas/` bloquea el PR hasta que el auditor enmascare el dato o justifique el falso positivo
 (SC-006).
