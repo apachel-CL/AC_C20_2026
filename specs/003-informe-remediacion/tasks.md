@@ -45,7 +45,7 @@ estados de revisión ni de remediación (FR-006, FR-015).
 
 **Purpose**: plantillas y ajustes de repositorio que usan las tres historias.
 
-- [ ] T001 [P] Crear `docs/plantillas/plan_remediacion.md` con la estructura de `contracts/plan-remediacion.md`.
+- [X] T001 [P] Crear `docs/plantillas/plan_remediacion.md` con la estructura de `contracts/plan-remediacion.md`.
   - Título `# Plan de remediación` y la nota sobre comandos propuestos solo contra `192.168.56.101`.
   - Líneas `- **Hallazgos excluidos (pendiente)**: 0` y `- **Hallazgos excluidos (descartado)**: 0`.
   - Tabla con el encabezado exacto `| Orden | Hallazgo | Evidencias | Severidad | Prioridad | Acción | Responsable sugerido | Plazo | Criterio de cierre | Estado | Fecha de cierre | Evidencia de cierre | Comentario |`, sin filas.
@@ -53,8 +53,8 @@ estados de revisión ni de remediación (FR-006, FR-015).
   - Comentario HTML con las reglas: orden "prioridad (P0 → P3), luego severidad (Crítica → Informativa), luego ID"; plazo `N días` (P0 7, P1 30, P2 90, P3 180) o `Comentario` que empieza con `Plazo ajustado:`; `Estado` "`abierto` · `en curso` · `cerrado`"; `cerrado` exige fecha AAAA-MM-DD y `EV-NNN`, si no ambas `—`; responsable como rol, nunca un nombre; celdas sin `|`.
 
   [E5] [Talla: XS | 1 pts]
-- [ ] T002 [P] Crear `docs/plantillas/resumen_ejecutivo.md` con la estructura de `contracts/resumen-ejecutivo.md`: las 7 secciones de nivel 2 en orden (`Objetivo y alcance`, `Resultados por severidad`, `Riesgos principales`, `Prioridades de remediación`, `Implicancias normativas`, `Limitaciones`, `Revisión`), la tabla `| Severidad | Hallazgos |` con las 5 severidades en 0, la leyenda "> Mapeo orientativo; no constituye dictamen jurídico." y un comentario HTML con las reglas: ≤ 500 palabras antes de `## Revisión`; máximo 5 riesgos, cada uno con un `H-NNN` revisado; sin comandos ni IPs; artículos solo `verificado`; `21.719` con "vigencia" mientras la entrada en vigor no esté verificada; `21.459` solo con "autorización"; [INFERENCIA] para lo que no venga de un hallazgo (FR-012) [E5] [Talla: XS | 1 pts]
-- [ ] T003 [P] Agregar a la sección "Definition of Done" de `.github/pull_request_template.md` el ítem "- [ ] Plan de remediación y resumen ejecutivo revisados por el auditor (Revisión vuelve a `pendiente` si se regeneraron con cambios)" (research R7, FR-016) [E5] [Talla: XS | 1 pts]
+- [X] T002 [P] Crear `docs/plantillas/resumen_ejecutivo.md` con la estructura de `contracts/resumen-ejecutivo.md`: las 7 secciones de nivel 2 en orden (`Objetivo y alcance`, `Resultados por severidad`, `Riesgos principales`, `Prioridades de remediación`, `Implicancias normativas`, `Limitaciones`, `Revisión`), la tabla `| Severidad | Hallazgos |` con las 5 severidades en 0, la leyenda "> Mapeo orientativo; no constituye dictamen jurídico." y un comentario HTML con las reglas: ≤ 500 palabras antes de `## Revisión`; máximo 5 riesgos, cada uno con un `H-NNN` revisado; sin comandos ni IPs; artículos solo `verificado`; `21.719` con "vigencia" mientras la entrada en vigor no esté verificada; `21.459` solo con "autorización"; [INFERENCIA] para lo que no venga de un hallazgo (FR-012) [E5] [Talla: XS | 1 pts]
+- [X] T003 [P] Agregar a la sección "Definition of Done" de `.github/pull_request_template.md` el ítem "- [ ] Plan de remediación y resumen ejecutivo revisados por el auditor (Revisión vuelve a `pendiente` si se regeneraron con cambios)" (research R7, FR-016) [E5] [Talla: XS | 1 pts]
 
 ---
 
@@ -64,14 +64,14 @@ estados de revisión ni de remediación (FR-006, FR-015).
 
 **⚠️ CRITICAL**: ninguna historia puede empezar hasta completar esta fase.
 
-- [ ] T004 Preparar `scripts/Test-Salidas.ps1` para 003 (`contracts/test-salidas-003.md`, research R6).
+- [X] T004 Preparar `scripts/Test-Salidas.ps1` para 003 (`contracts/test-salidas-003.md`, research R6).
   - En `Get-Contexto`: leer `plan_remediacion.md` (metadatos con `Get-Metadatos`, tabla con `Get-TablaMarkdown`, bloque Revisión) y `resumen_ejecutivo.md` (texto, secciones de nivel 2 y bloque Revisión), si existen.
   - Calcular el conjunto de hallazgos revisados (`Estado` `aprobado` o `corregido`) y los recuentos de `pendiente` y `descartado`.
   - Banderas: `HayPlan` activa C23–C25; `HayResumen` activa C26–C27; cualquiera de las dos activa C28 y C29.
   - Sin ninguno de los dos archivos, nada de 003 se ejecuta ni se imprime: todos los fixtures de 001 y 002 dan el mismo código y la misma salida (SC-006; el runner sigue en 0).
 
   [E5] [Talla: M | 3 pts]
-- [ ] T005 [P] Agregar a `docs/flujo_prompt_e_hu.md` una sección "2d. Prompt de informe y remediación" que:
+- [X] T005 [P] Agregar a `docs/flujo_prompt_e_hu.md` una sección "2d. Prompt de informe y remediación" que:
   - use solo hallazgos `aprobado` o `corregido`, su fila de la matriz y los inventarios; no cree ni modifique hallazgos, evidencias, recomendaciones ni la matriz (FR-001);
   - genere `salidas/plan_remediacion.md` desde `docs/plantillas/plan_remediacion.md`, copiando acción, prioridad, severidad, responsable y criterio de cierre de la matriz (FR-003), con el orden de FR-004, el plazo derivado de FR-005, `Estado` `abierto` y los recuentos de excluidos (FR-007);
   - genere `salidas/resumen_ejecutivo.md` desde `docs/plantillas/resumen_ejecutivo.md`, en lenguaje no técnico (FR-010), ≤ 500 palabras, máximo 5 riesgos con su `H-NNN`, la leyenda normativa y citas legales solo `verificado` (FR-011);
@@ -97,15 +97,15 @@ termina con 0.
 
 ### Validación de US1
 
-- [ ] T006 [US1] Implementar C23 en `scripts/Test-Salidas.ps1` (`contracts/plan-remediacion.md`): encabezado de la tabla exacto y en orden; las dos líneas de excluidos presentes, enteras e iguales al recuento de hallazgos `pendiente` y `descartado` (FR-007); `Severidad` ∈ "`Crítica` | `Alta` | `Media` | `Baja` | `Informativa`"; `Prioridad` ∈ "`P0`…`P3`"; `Estado` ∈ "`abierto` · `en curso` · `cerrado`" [E5] [Talla: S | 2 pts]
-- [ ] T007 [US1] Implementar C24 en `scripts/Test-Salidas.ps1`.
+- [X] T006 [US1] Implementar C23 en `scripts/Test-Salidas.ps1` (`contracts/plan-remediacion.md`): encabezado de la tabla exacto y en orden; las dos líneas de excluidos presentes, enteras e iguales al recuento de hallazgos `pendiente` y `descartado` (FR-007); `Severidad` ∈ "`Crítica` | `Alta` | `Media` | `Baja` | `Informativa`"; `Prioridad` ∈ "`P0`…`P3`"; `Estado` ∈ "`abierto` · `en curso` · `cerrado`" [E5] [Talla: S | 2 pts]
+- [X] T007 [US1] Implementar C24 en `scripts/Test-Salidas.ps1`.
   - Exactamente una fila por hallazgo revisado; ningún `H-NNN` repetido, inexistente, `pendiente` o `descartado` (FR-002, SC-001).
   - `Evidencias` igual a `evidencias` de la matriz con `;` → `; `; `Severidad`, `Prioridad`, `Acción` (= `recomendacion`), `Responsable sugerido` y `Criterio de cierre` iguales a la matriz (FR-003, SC-002).
   - `Orden` = 1…n consecutivo y filas ordenadas por prioridad (P0 → P3), severidad (Crítica → Informativa) e ID (FR-004).
 
   [E5] [Talla: M | 3 pts]
-- [ ] T008 [US1] Implementar C25 en `scripts/Test-Salidas.ps1`: `Plazo` cumple `^\d+ días$`; si difiere del derivado (P0 7, P1 30, P2 90, P3 180), `Comentario` empieza con `Plazo ajustado:` (FR-005); `cerrado` ⇒ `Fecha de cierre` `^\d{4}-\d{2}-\d{2}$` y `Evidencia de cierre` = un `EV-NNN` del inventario; en otro estado ambas `—` (FR-006); ninguna IPv4 distinta de `192.168.56.101` en el archivo (FR-014) [E5] [Talla: S | 2 pts]
-- [ ] T009 [P] [US1] Extender `scripts/tests/fixtures/valido/`.
+- [X] T008 [US1] Implementar C25 en `scripts/Test-Salidas.ps1`: `Plazo` cumple `^\d+ días$`; si difiere del derivado (P0 7, P1 30, P2 90, P3 180), `Comentario` empieza con `Plazo ajustado:` (FR-005); `cerrado` ⇒ `Fecha de cierre` `^\d{4}-\d{2}-\d{2}$` y `Evidencia de cierre` = un `EV-NNN` del inventario; en otro estado ambas `—` (FR-006); ninguna IPv4 distinta de `192.168.56.101` en el archivo (FR-014) [E5] [Talla: S | 2 pts]
+- [X] T009 [P] [US1] Extender `scripts/tests/fixtures/valido/`.
   - Agregar `H-002` ficticio aprobado de severidad `Baja`, prioridad `P3`, con evidencia `EV-900`, mapeo ISO completo y legal en `no aplica`, y su fila coherente en la matriz y en `mapa_normativo.md` (C1–C22 siguen en OK).
   - Agregar `salidas/plan_remediacion.md` con `H-001` (Media, P2, 90 días) y `H-002` (Baja, P3, 180 días) en ese orden, estado `abierto`, Revisión `aprobado` con revisor y fecha.
   - Crear `invalido-c23-encabezado/`, `invalido-c23-excluidos-mal-contados/`, `invalido-c24-fila-faltante/`, `invalido-c24-accion-distinta/`, `invalido-c24-orden/`, `invalido-c25-plazo-sin-motivo/`, `invalido-c25-cerrado-sin-evidencia/` e `invalido-c25-ip-ajena/`; cada uno rompe una sola regla y explica cuál en su `LEEME.md`.
@@ -131,7 +131,7 @@ hallazgo existente (SC-003, SC-004, SC-005).
 
 ### Validación de US2
 
-- [ ] T011 [US2] Implementar C26 en `scripts/Test-Salidas.ps1` (`contracts/resumen-ejecutivo.md`, research R4).
+- [X] T011 [US2] Implementar C26 en `scripts/Test-Salidas.ps1` (`contracts/resumen-ejecutivo.md`, research R4).
   - Las 7 secciones de nivel 2 en orden y las 6 primeras no vacías.
   - Palabras (tokens separados por espacios con al menos una letra o dígito) desde el título hasta `## Revisión`, sin comentarios HTML: máximo 500.
   - Tabla `| Severidad | Hallazgos |` con las 5 severidades y conteos iguales a los hallazgos revisados de la matriz.
@@ -140,8 +140,8 @@ hallazgo existente (SC-003, SC-004, SC-005).
   - Agregar al resumen final las palabras del resumen.
 
   [E5] [Talla: M | 3 pts]
-- [ ] T012 [US2] Implementar C27 en `scripts/Test-Salidas.ps1` (research R5): en `Implicancias normativas`, la leyenda "Mapeo orientativo; no constituye dictamen jurídico"; toda mención `artículo X` o `art. X` usa un artículo con fila `verificado` en `verificacion_articulos.md`; si la fila `entrada en vigor` no está `verificado` (o no existe la lista), cada línea con `21.719` contiene `vigencia`; cada línea con `21.459` contiene `autorización`. En todo el archivo: ninguna IPv4 distinta de `192.168.56.101` y ninguna marca `propuesto: lo ejecuta el auditor` [E5] [Talla: S | 2 pts]
-- [ ] T013 [P] [US2] Agregar a `scripts/tests/fixtures/valido/` el `salidas/resumen_ejecutivo.md` coherente con H-001 y H-002 (Media 1, Baja 1; dos riesgos; leyenda; 21.719 con "vigencia"; Revisión `aprobado`) y crear `invalido-c26-seccion-faltante/`, `invalido-c26-mas-de-500-palabras/`, `invalido-c26-conteo-distinto/`, `invalido-c26-riesgo-sin-hallazgo/`, `invalido-c27-sin-leyenda/`, `invalido-c27-articulo-no-verificado/`, `invalido-c27-21719-sin-vigencia/` e `invalido-c27-comando-en-resumen/`; cada uno rompe una sola regla y lo explica en su `LEEME.md` [E5] [Talla: M | 3 pts]
+- [X] T012 [US2] Implementar C27 en `scripts/Test-Salidas.ps1` (research R5): en `Implicancias normativas`, la leyenda "Mapeo orientativo; no constituye dictamen jurídico"; toda mención `artículo X` o `art. X` usa un artículo con fila `verificado` en `verificacion_articulos.md`; si la fila `entrada en vigor` no está `verificado` (o no existe la lista), cada línea con `21.719` contiene `vigencia`; cada línea con `21.459` contiene `autorización`. En todo el archivo: ninguna IPv4 distinta de `192.168.56.101` y ninguna marca `propuesto: lo ejecuta el auditor` [E5] [Talla: S | 2 pts]
+- [X] T013 [P] [US2] Agregar a `scripts/tests/fixtures/valido/` el `salidas/resumen_ejecutivo.md` coherente con H-001 y H-002 (Media 1, Baja 1; dos riesgos; leyenda; 21.719 con "vigencia"; Revisión `aprobado`) y crear `invalido-c26-seccion-faltante/`, `invalido-c26-mas-de-500-palabras/`, `invalido-c26-conteo-distinto/`, `invalido-c26-riesgo-sin-hallazgo/`, `invalido-c27-sin-leyenda/`, `invalido-c27-articulo-no-verificado/`, `invalido-c27-21719-sin-vigencia/` e `invalido-c27-comando-en-resumen/`; cada uno rompe una sola regla y lo explica en su `LEEME.md` [E5] [Talla: M | 3 pts]
 
 ### Ejecución del flujo en US2
 
@@ -161,13 +161,13 @@ cerrado.
 
 ### Validación de US3
 
-- [ ] T015 [US3] Implementar C28 y C29 en `scripts/Test-Salidas.ps1`.
+- [X] T015 [US3] Implementar C28 y C29 en `scripts/Test-Salidas.ps1`.
   - **C28:** en cada documento existente, bloque `## Revisión` con `Estado` ∈ "`pendiente` · `aprobado` · `corregido`" (`descartado` no aplica); si no es `pendiente`, `Revisor` no vacío y `Fecha` `^\d{4}-\d{2}-\d{2}$` (FR-015).
   - **C29:** `[AVISO]` si existe uno de los dos documentos y falta el otro, o si alguno está `pendiente`.
   - Resumen final: entradas del plan por estado (`abierto` / `en curso` / `cerrado`) y "informe cerrado" o "informe no cerrado".
 
   [E5] [Talla: S | 2 pts]
-- [ ] T016 [P] [US3] Crear `invalido-c28-aprobado-sin-revisor/`, `invalido-c28-estado-descartado/`, `aviso-c29-informe-pendiente/` (plan y resumen en `pendiente`, termina con 0 y `[AVISO]` C29) y `aviso-c29-falta-resumen/` (solo plan, termina con 0 y `[AVISO]` C29) en `scripts/tests/fixtures/`; comprobar que `valido/` (ambos `aprobado`) no muestra C29 [E5] [Talla: S | 2 pts]
+- [X] T016 [P] [US3] Crear `invalido-c28-aprobado-sin-revisor/`, `invalido-c28-estado-descartado/`, `aviso-c29-informe-pendiente/` (plan y resumen en `pendiente`, termina con 0 y `[AVISO]` C29) y `aviso-c29-falta-resumen/` (solo plan, termina con 0 y `[AVISO]` C29) en `scripts/tests/fixtures/`; comprobar que `valido/` (ambos `aprobado`) no muestra C29 [E5] [Talla: S | 2 pts]
 
 ### Ejecución del flujo en US3
 
@@ -182,7 +182,7 @@ al plan y al resumen.
 
 **Purpose**: documentación y medición.
 
-- [ ] T018 [P] Actualizar la sección de validación de `README.md` con C23–C29 y los dos archivos nuevos de `salidas/`, y agregar en `specs/001-analisis-evidencias/contracts/test-salidas.md` una nota que remita a `specs/003-informe-remediacion/contracts/test-salidas-003.md` [E5] [Talla: XS | 1 pts]
+- [X] T018 [P] Actualizar la sección de validación de `README.md` con C23–C29 y los dos archivos nuevos de `salidas/`, y agregar en `specs/001-analisis-evidencias/contracts/test-salidas.md` una nota que remita a `specs/003-informe-remediacion/contracts/test-salidas-003.md` [E5] [Talla: XS | 1 pts]
 - [ ] T019 Ejecutar los escenarios 0 y 4 de `specs/003-informe-remediacion/quickstart.md` (y 1–3 si hay hallazgos revisados). Medir con `Measure-Command` el validador sobre `salidas/` y sobre `scripts/tests/fixtures/valido/` (meta < 5 s). Pegar el resultado, dudas y supuestos en la descripción del PR (FR-019) [E5] [Talla: S | 2 pts]
 
 ---
@@ -273,5 +273,10 @@ Task: "T005 Sección 2d en docs/flujo_prompt_e_hu.md"
 - Hacer commit después de cada tarea o grupo lógico; un PR por fase o historia, con `Closes #n`.
 - Las tareas de ejecución usan los issues existentes #23 y #24 de la épica E5; las demás se
   crean en el Project sin duplicarlos. #22 (Matriz de hallazgos) ya está cerrado.
+- T009: `invalido-c24-fila-faltante/` también quita H-002 de las prioridades del resumen para romper solo C24.
+- T019 (parcial, 2026-10-30): escenarios 0 y 4 hechos (54 fixtures, 0 fallas; 0 comandos de red;
+  validador 0,41 s sobre `salidas/` y 0,87 s sobre `valido/`). Los fixtures de 001 y 002 dan la misma
+  salida que antes, salvo el número de comprobaciones registradas (SC-006); `valido/` cambia a propósito
+  (H-002, plan y resumen). Faltan los escenarios 1–3, que requieren hallazgos revisados.
 - Ningún fixture contiene artículos legales reales sin verificar: si hace falta uno, se usa
   `ARTICULO-FICTICIO` como en 002 (FR-011).
