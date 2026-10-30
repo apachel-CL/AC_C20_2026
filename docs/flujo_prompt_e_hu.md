@@ -115,3 +115,62 @@ CIERRE (FR-016)
 - **Etiquetas:** `epic` `hallazgo` `evidencia` `normativa` `prompt` `bloqueado`
 - **Vistas:** tablero · tabla por épica · roadmap por sprint
 - **Sprint 1 sugerido:** E1 completa + inventario de evidencias + prueba del flujo con las primeras capturas (incluida EV-002).
+
+---
+
+## 2c. Prompt de mapeo normativo (funcionalidad 002)
+
+Se ejecuta después de §2a, sobre los hallazgos ya generados en `./salidas/hallazgos/`. Formatos:
+`specs/002-mapeo-normativo/contracts/`.
+
+```text
+Actúa como auditor de cumplimiento (ISO/IEC 27001:2022, Ley 21.663, Ley 21.719, Ley 21.459)
+usando la skill sk-ciberauditor. Vas a mapear los hallazgos existentes; no analizas evidencias
+nuevas ni creas hallazgos (FR-001).
+
+CONTEXTO
+- Lee ./docs/alcance.md y cada ./salidas/hallazgos/H-NNN.md cuyo Estado no sea "descartado".
+- Plantillas: ./docs/plantillas/mapeo_normativo.md (sección a insertar entre "## Recomendación"
+  y "## Revisión"), verificacion_articulos.md y mapa_normativo.md.
+- Todo mapeo legal es orientativo y no constituye dictamen jurídico: incluye la leyenda.
+
+TAREA — para cada hallazgo no descartado:
+1. ISO/IEC 27001:2022 (FR-003, FR-004): confirma o corrige el control principal del Anexo A
+   (A.5.1–A.5.37, A.6.1–A.6.8, A.7.1–A.7.14, A.8.1–A.8.34) en los campos "Control ISO" y
+   "Certeza ISO". Si lo corriges, registra "Control ISO anterior" y "Motivo de corrección"; si lo
+   confirmas, "—" y "confirmado". Agrega controles adicionales sin repetir el principal. Ante la
+   duda, "verificar". Actualiza control_iso, certeza_iso y controles_iso_adicionales en la matriz.
+2. LEY 21.663 (FR-005, FR-006): categoría "gestión de riesgos", "medidas de seguridad",
+   "reporte de incidentes" o "no aplica". El mapeo es hipotético: la justificación dice
+   "si la organización fuera entidad obligada" y la certeza nunca es "Alta".
+3. LEY 21.719 (FR-007): "no aplica" si el hallazgo no afecta datos personales. "Podría
+   afectarlos" = expone una base de datos, un directorio o servicio de usuarios, correo,
+   archivos compartidos o una aplicación web con cuentas. Si los afecta o podría afectarlos y la
+   fila "entrada en vigor" de verificacion_articulos.md NO está "verificado", registra
+   "pendiente de vigencia" y deja la obligación candidata solo en la justificación; siempre
+   completa la advertencia de vigencia diferida.
+4. LEY 21.459 (FR-008): no la mapees en el hallazgo. Solo va en mapa_normativo.md, como marco
+   de la autorización de las pruebas.
+5. ARTÍCULOS (FR-009, FR-010): deja todo artículo en "verificar" ("—" si no aplica) y agrega una
+   fila "pendiente" por referencia en verificacion_articulos.md, más la fila "entrada en vigor"
+   de la Ley 21.719 si corresponde. NO inventes números de artículo. Copia un artículo al
+   hallazgo y a la matriz solo si su fila está "verificado" (lo hace el auditor).
+6. MATRIZ Y MAPA (FR-011, FR-012): completa las 7 columnas legales al final de
+   matriz_hallazgos.csv (vacías para hallazgos descartados) y regenera mapa_normativo.md desde
+   los hallazgos (sin "no aplica" ni "pendiente de vigencia").
+
+REGLAS
+- Etiqueta cada justificación con [HECHO] o [INFERENCIA] (FR-014).
+- No ejecutes comandos contra sistemas ni consultes fuentes externas: la verificación de
+  artículos la hace el auditor (FR-015).
+- REVISIÓN (FR-016): en todo hallazgo cuyo mapeo crees o modifiques, pon Estado: pendiente,
+  vacía Revisor y Fecha, conserva el comentario anterior con el prefijo "Revisión previa:" y
+  alinea estado_revision en la matriz.
+
+CIERRE (FR-017)
+- Ejecuta el validador y corrige hasta que termine sin [ERROR]:
+  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Test-Salidas.ps1
+  El [AVISO] C22 lista las referencias pendientes de verificación.
+- Resume lo mapeado, cuántas referencias quedan pendientes y las dudas y supuestos, en un
+  bloque listo para pegar en la descripción del PR.
+```
