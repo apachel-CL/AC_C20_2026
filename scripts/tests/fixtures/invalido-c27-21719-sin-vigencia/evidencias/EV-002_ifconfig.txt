@@ -1,0 +1,1 @@
+fixture ficticio: reemplaza la captura de ifconfig de EV-002 (docs/alcance.md). No es evidencia real.

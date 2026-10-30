@@ -6,8 +6,10 @@
     Solo lee archivos locales: no usa la red, no ejecuta procesos y no modifica archivos
     (constitución, principio IV; FR-012). Contrato: specs/001-analisis-evidencias/contracts/test-salidas.md
 
-    Cada comprobación (C1…C14) es una función registrada en $script:Comprobaciones y recibe el
-    contexto con los archivos ya leídos. Errores: C1–C10. Avisos: C11–C14.
+    Cada comprobación (C1…C29) es una función registrada en $script:Comprobaciones y recibe el
+    contexto con los archivos ya leídos. Errores: C1–C10. Avisos: C11–C14. Mapeo normativo (002):
+    C15–C22. Informe y remediación (003): C23–C28 (error) y C29 (aviso), solo si existen
+    plan_remediacion.md o resumen_ejecutivo.md.
 
 .PARAMETER Ruta
     Carpeta con los inventarios, hallazgos/ y la matriz. Por defecto: salidas
@@ -45,6 +47,12 @@ $script:ColumnasMatriz = @('id_hallazgo', 'enunciado', 'evidencias', 'severidad'
 $script:ColumnasLegales = @('controles_iso_adicionales', 'ley_21663_obligacion', 'ley_21663_articulo',
     'ley_21663_certeza', 'ley_21719_obligacion', 'ley_21719_articulo', 'ley_21719_certeza')
 $script:EncabezadoVerificacion = @('ID', 'Hallazgo', 'Ley', 'Obligación', 'Artículo', 'Estado', 'Fuente', 'Fecha', 'Comentario')
+
+# Funcionalidad 003 (specs/003-informe-remediacion/contracts/): plan de remediación y resumen ejecutivo.
+$script:EncabezadoPlan = @('Orden', 'Hallazgo', 'Evidencias', 'Severidad', 'Prioridad', 'Acción', 'Responsable sugerido',
+    'Plazo', 'Criterio de cierre', 'Estado', 'Fecha de cierre', 'Evidencia de cierre', 'Comentario')
+$script:SeccionesResumen = @('Objetivo y alcance', 'Resultados por severidad', 'Riesgos principales',
+    'Prioridades de remediación', 'Implicancias normativas', 'Limitaciones', 'Revisión')
 
 # --- Reporte ---
 
@@ -136,6 +144,12 @@ function Get-Contexto([string]$RutaSalidas, [string]$RutaEvidencias) {
         ExisteVerificacion = $false
         TextoMapa        = $null   # mapa_normativo.md (002)
         Activo002        = $false  # hay sección de mapeo, lista o mapa: se ejecutan C16–C22
+        TextoPlan        = $null   # plan_remediacion.md (003)
+        FilasPlan        = $null   # filas de la tabla del plan
+        TextoResumen     = $null   # resumen_ejecutivo.md (003)
+        HayPlan          = $false  # se ejecutan C23–C25
+        HayResumen       = $false  # se ejecutan C26–C27
+        Revisados        = @()     # IDs de hallazgos con Estado aprobado o corregido (003)
     }
 
     if ($ctx.HayEvidencias) {
@@ -181,6 +195,20 @@ function Get-Contexto([string]$RutaSalidas, [string]$RutaEvidencias) {
 
     $ctx.Activo002 = $ctx.ExisteVerificacion -or ($null -ne $ctx.TextoMapa) -or
         (@($ctx.Hallazgos | Where-Object { $_.TieneMapeo }).Count -gt 0)
+
+    $pathPlan = Join-Path $RutaSalidas 'plan_remediacion.md'
+    if (Test-Path -LiteralPath $pathPlan) {
+        $ctx.HayPlan = $true
+        $ctx.TextoPlan = Read-Utf8 $pathPlan
+        $ctx.FilasPlan = Get-TablaMarkdown $ctx.TextoPlan $script:EncabezadoPlan
+    }
+    $pathResumen = Join-Path $RutaSalidas 'resumen_ejecutivo.md'
+    if (Test-Path -LiteralPath $pathResumen) {
+        $ctx.HayResumen = $true
+        $ctx.TextoResumen = Read-Utf8 $pathResumen
+    }
+    $ctx.Revisados = @($ctx.Hallazgos | Where-Object { (Get-Meta $_ 'Estado') -cin @('aprobado', 'corregido') } |
+        ForEach-Object { $_.Archivo -replace '\.md$', '' } | Sort-Object)
 
     [pscustomobject]$ctx
 }
@@ -925,6 +953,294 @@ $script:Comprobaciones += {
     }
 }
 
+# --- Funcionalidad 003: informe y remediación (C23–C29, specs/003-informe-remediacion/contracts/test-salidas-003.md) ---
+
+$script:EstadosRemediacion = @('abierto', 'en curso', 'cerrado')
+$script:EstadosDocumento = @('pendiente', 'aprobado', 'corregido')
+$script:PlazoPorPrioridad = @{ 'P0' = 7; 'P1' = 30; 'P2' = 90; 'P3' = 180 }
+$script:LeyendaInforme = 'Mapeo orientativo; no constituye dictamen jurídico'
+$script:MarcaComando = 'propuesto: lo ejecuta el auditor'
+$script:MaxPalabrasResumen = 500
+$script:MaxRiesgos = 5
+
+# Texto de la sección "## Nombre" hasta la siguiente sección de nivel 2, o $null si no existe.
+function Get-Seccion([string]$Texto, [string]$Nombre) {
+    if ($Texto -match ('(?ms)^## ' + [regex]::Escape($Nombre) + '[ \t]*\r?$(.*?)(?=^## |\z)')) { $Matches[1] } else { $null }
+}
+
+function Remove-ComentariosHtml([string]$Texto) { $Texto -replace '(?s)<!--.*?-->', '' }
+
+# Palabras desde el título hasta "## Revisión", sin comentarios HTML (research R4).
+function Get-PalabrasResumen([string]$Texto) {
+    $m = [regex]::Match($Texto, '(?m)^## Revisión')
+    $cuerpo = if ($m.Success) { $Texto.Substring(0, $m.Index) } else { $Texto }
+    @((Remove-ComentariosHtml $cuerpo) -split '\s+' | Where-Object { $_ -match '[\p{L}\p{N}]' }).Count
+}
+
+# Filas de la matriz por id_hallazgo (vacío si la matriz no es legible; ya informado en C8).
+function Get-MatrizPorId($Ctx) {
+    $indice = @{}
+    if ($script:MatrizLegible) {
+        foreach ($f in @($Ctx.TextoMatriz | ConvertFrom-Csv)) { if (-not $indice.ContainsKey($f.id_hallazgo)) { $indice[$f.id_hallazgo] = $f } }
+    }
+    $indice
+}
+
+function Get-FilasPlan($Ctx) { @(if ($null -ne $Ctx.FilasPlan) { $Ctx.FilasPlan }) }
+
+function Get-EstadoDocumento([string]$Texto) {
+    $rev = Get-Seccion $Texto 'Revisión'
+    if ($null -eq $rev) { return $null }
+    $meta = Get-Metadatos $rev
+    if ($meta.Contains('Estado')) { $meta['Estado'] } else { $null }
+}
+
+function Test-IpsAjenas([string]$Id, [string]$Archivo, [string]$Texto) {
+    foreach ($m in [regex]::Matches($Texto, '\b\d{1,3}(\.\d{1,3}){3}\b')) {
+        if ($m.Value -ne $script:ActivoEnAlcance) {
+            Write-Fallo $Id ("{0}: menciona {1}, fuera del activo en alcance ({2})." -f $Archivo, $m.Value, $script:ActivoEnAlcance)
+        }
+    }
+}
+
+# C23 — Plan: encabezado, recuento de excluidos y enumerados (FR-002, FR-006, FR-007).
+$script:Comprobaciones += {
+    param($c)
+    if (-not $c.HayPlan) { return }
+    Invoke-Comprobacion 'C23' 'Plan de remediación con encabezado, excluidos y enumerados válidos' {
+        param($c)
+        if ($null -eq $c.FilasPlan) {
+            Write-Fallo 'C23' ("plan_remediacion.md no contiene la tabla con el encabezado del contrato: '| {0} |'." -f ($script:EncabezadoPlan -join ' | '))
+        }
+        $meta = Get-Metadatos $c.TextoPlan
+        foreach ($estado in @('pendiente', 'descartado')) {
+            $clave = "Hallazgos excluidos ($estado)"
+            $real = @($c.Hallazgos | Where-Object { (Get-Meta $_ 'Estado') -ceq $estado }).Count
+            if (-not $meta.Contains($clave)) { Write-Fallo 'C23' ("plan_remediacion.md: falta la línea '{0}'." -f $clave); continue }
+            if ($meta[$clave] -notmatch '^\d+$') { Write-Fallo 'C23' ("plan_remediacion.md: '{0}' = '{1}' no es un entero." -f $clave, $meta[$clave]); continue }
+            if ([int]$meta[$clave] -ne $real) { Write-Fallo 'C23' ("plan_remediacion.md: '{0}' = {1}, pero hay {2}." -f $clave, $meta[$clave], $real) }
+        }
+        foreach ($f in (Get-FilasPlan $c)) {
+            $l = $f._Linea
+            if (-not (Test-Enum $f.Severidad $script:Severidades)) { Write-Fallo 'C23' ("Plan, línea {0}: severidad '{1}' inválida." -f $l, $f.Severidad) }
+            if (-not (Test-Enum $f.Prioridad $script:Prioridades)) { Write-Fallo 'C23' ("Plan, línea {0}: prioridad '{1}' inválida." -f $l, $f.Prioridad) }
+            if (-not (Test-Enum $f.Estado $script:EstadosRemediacion)) { Write-Fallo 'C23' ("Plan, línea {0}: estado '{1}' inválido." -f $l, $f.Estado) }
+        }
+    } $c
+}
+
+# C24 — Plan: una fila por hallazgo revisado, igual a la matriz, con Orden y orden correctos (FR-002–FR-004, SC-001, SC-002).
+$script:Comprobaciones += {
+    param($c)
+    if (-not $c.HayPlan -or $null -eq $c.FilasPlan) { return }
+    Invoke-Comprobacion 'C24' 'Plan coherente 1:1 con los hallazgos revisados y la matriz, y ordenado' {
+        param($c)
+        $matriz = Get-MatrizPorId $c
+        $filas = @(Get-FilasPlan $c)
+        $vistos = @{}
+        foreach ($f in $filas) {
+            $id = $f.Hallazgo
+            if ($vistos.ContainsKey($id)) { Write-Fallo 'C24' ("Plan: '{0}' aparece más de una vez." -f $id); continue }
+            $vistos[$id] = $true
+            if ($c.Revisados -cnotcontains $id) { Write-Fallo 'C24' ("Plan: '{0}' no es un hallazgo revisado (aprobado o corregido)." -f $id); continue }
+            if (-not $matriz.ContainsKey($id)) { continue }  # sin fila en la matriz: informado en C9
+            $m = $matriz[$id]
+            $esperado = [ordered]@{
+                'Evidencias'           = (Get-IdsEvidencia $m.evidencias) -join '; '
+                'Severidad'            = $m.severidad
+                'Prioridad'            = $m.prioridad
+                'Acción'               = $m.recomendacion
+                'Responsable sugerido' = $m.responsable_sugerido
+                'Criterio de cierre'   = $m.criterio_cierre
+            }
+            foreach ($col in $esperado.Keys) {
+                if ([string]$f.$col -cne [string]$esperado[$col]) {
+                    Write-Fallo 'C24' ("Plan, {0}: '{1}' ('{2}') no coincide con la matriz ('{3}')." -f $id, $col, $f.$col, $esperado[$col])
+                }
+            }
+        }
+        foreach ($id in $c.Revisados) {
+            if (-not $vistos.ContainsKey($id)) { Write-Fallo 'C24' ("Plan: falta la entrada del hallazgo revisado {0}." -f $id) }
+        }
+        for ($i = 0; $i -lt $filas.Count; $i++) {
+            if ($filas[$i].Orden -ne [string]($i + 1)) { Write-Fallo 'C24' ("Plan, línea {0}: Orden '{1}' (esperado {2})." -f $filas[$i]._Linea, $filas[$i].Orden, ($i + 1)) }
+        }
+        # Orden de FR-004: prioridad, severidad, ID.
+        $clave = { param($f) '{0}|{1}|{2}' -f [array]::IndexOf($script:Prioridades, $f.Prioridad), [array]::IndexOf($script:Severidades, $f.Severidad), $f.Hallazgo }
+        for ($i = 1; $i -lt $filas.Count; $i++) {
+            if ([string]::CompareOrdinal((& $clave $filas[$i - 1]), (& $clave $filas[$i])) -gt 0) {
+                Write-Fallo 'C24' ("Plan: {0} está antes que {1}; el orden es prioridad, severidad e ID." -f $filas[$i - 1].Hallazgo, $filas[$i].Hallazgo)
+            }
+        }
+    } $c
+}
+
+# C25 — Plan: plazo derivado o ajustado con motivo; cierre con fecha y evidencia; IPs solo del activo (FR-005, FR-006, FR-014).
+$script:Comprobaciones += {
+    param($c)
+    if (-not $c.HayPlan) { return }
+    Invoke-Comprobacion 'C25' 'Plan con plazos, cierres e IPs válidos' {
+        param($c)
+        $indice = Get-IndiceEvidencias $c
+        foreach ($f in (Get-FilasPlan $c)) {
+            $id = $f.Hallazgo
+            if ($f.Plazo -cnotmatch '^(\d+) días$') {
+                Write-Fallo 'C25' ("Plan, {0}: plazo '{1}' sin el formato 'N días'." -f $id, $f.Plazo)
+            }
+            elseif ($script:PlazoPorPrioridad.ContainsKey($f.Prioridad) -and [int]$Matches[1] -ne $script:PlazoPorPrioridad[$f.Prioridad] -and
+                -not $f.Comentario.StartsWith('Plazo ajustado:')) {
+                Write-Fallo 'C25' ("Plan, {0}: plazo '{1}' distinto del derivado de {2} ({3} días) sin 'Plazo ajustado:' en el comentario." -f $id, $f.Plazo, $f.Prioridad, $script:PlazoPorPrioridad[$f.Prioridad])
+            }
+            if ($f.Estado -ceq 'cerrado') {
+                if ($f.'Fecha de cierre' -notmatch '^\d{4}-\d{2}-\d{2}$') { Write-Fallo 'C25' ("Plan, {0}: 'cerrado' sin fecha de cierre AAAA-MM-DD." -f $id) }
+                $ev = $f.'Evidencia de cierre'
+                if ($ev -cnotmatch '^EV-\d{3}$' -or -not $indice.ContainsKey($ev)) { Write-Fallo 'C25' ("Plan, {0}: 'cerrado' sin evidencia de cierre del inventario ('{1}')." -f $id, $ev) }
+            }
+            elseif ($f.'Fecha de cierre' -cne '—' -or $f.'Evidencia de cierre' -cne '—') {
+                Write-Fallo 'C25' ("Plan, {0}: estado '{1}' con fecha o evidencia de cierre; deben ser '—'." -f $id, $f.Estado)
+            }
+        }
+        Test-IpsAjenas 'C25' 'plan_remediacion.md' $c.TextoPlan
+    } $c
+}
+
+# C26 — Resumen: secciones, extensión, conteos, riesgos y prioridades (FR-008, FR-009, SC-003, SC-004).
+$script:Comprobaciones += {
+    param($c)
+    if (-not $c.HayResumen) { return }
+    Invoke-Comprobacion 'C26' 'Resumen ejecutivo con secciones, extensión y conteos válidos' {
+        param($c)
+        $t = $c.TextoResumen
+        $titulos = @([regex]::Matches($t, '(?m)^## (.+?)[ \t]*\r?$') | ForEach-Object { $_.Groups[1].Value })
+        if (($titulos -join "`t") -cne ($script:SeccionesResumen -join "`t")) {
+            Write-Fallo 'C26' ("resumen_ejecutivo.md: secciones '{0}'. Esperado: '{1}'." -f ($titulos -join ', '), ($script:SeccionesResumen -join ', '))
+        }
+        foreach ($s in ($script:SeccionesResumen | Select-Object -First 6)) {
+            $texto = Get-Seccion $t $s
+            if ($null -ne $texto -and [string]::IsNullOrWhiteSpace((Remove-ComentariosHtml $texto))) { Write-Fallo 'C26' ("resumen_ejecutivo.md: la sección '{0}' está vacía." -f $s) }
+        }
+        $palabras = Get-PalabrasResumen $t
+        if ($palabras -gt $script:MaxPalabrasResumen) {
+            Write-Fallo 'C26' ("resumen_ejecutivo.md: {0} palabras antes de '## Revisión' (máximo {1})." -f $palabras, $script:MaxPalabrasResumen)
+        }
+
+        $matriz = Get-MatrizPorId $c
+        $tabla = Get-TablaMarkdown $t @('Severidad', 'Hallazgos')
+        if ($null -eq $tabla) { Write-Fallo 'C26' "resumen_ejecutivo.md: falta la tabla '| Severidad | Hallazgos |'." }
+        else {
+            $leidas = @($tabla | ForEach-Object { $_.Severidad })
+            if (($leidas -join ',') -cne ($script:Severidades -join ',')) {
+                Write-Fallo 'C26' ("Tabla de severidades: filas '{0}'. Esperado: '{1}'." -f ($leidas -join ', '), ($script:Severidades -join ', '))
+            }
+            foreach ($f in $tabla) {
+                $sev = $f.Severidad
+                $real = @($c.Revisados | Where-Object { $matriz.ContainsKey($_) -and $matriz[$_].severidad -ceq $sev }).Count
+                if ($f.Hallazgos -ne [string]$real) { Write-Fallo 'C26' ("Tabla de severidades, {0}: '{1}', pero hay {2} hallazgos revisados." -f $sev, $f.Hallazgos, $real) }
+            }
+        }
+
+        $riesgos = Get-Seccion $t 'Riesgos principales'
+        if ($null -ne $riesgos) {
+            $items = @(((Remove-ComentariosHtml $riesgos) -split "`r?`n") | Where-Object { $_ -match '^\s*\d+\.\s' })
+            if ($items.Count -gt $script:MaxRiesgos) { Write-Fallo 'C26' ("Riesgos principales: {0} ítems (máximo {1})." -f $items.Count, $script:MaxRiesgos) }
+            if ($items.Count -eq 0 -and $c.Revisados.Count -gt 0) { Write-Fallo 'C26' 'Riesgos principales: sin ítems, pero hay hallazgos revisados.' }
+            foreach ($item in $items) {
+                $ids = @([regex]::Matches($item, 'H-\d{3}') | ForEach-Object { $_.Value })
+                if (@($ids | Where-Object { $c.Revisados -ccontains $_ }).Count -eq 0) {
+                    Write-Fallo 'C26' ("Riesgos principales: '{0}' no cita un hallazgo revisado." -f $item.Trim())
+                }
+            }
+        }
+        $prioridades = Get-Seccion $t 'Prioridades de remediación'
+        # Si el plan existe pero su tabla no es legible, ya se informa en C23.
+        if ($null -ne $prioridades -and -not ($c.HayPlan -and $null -eq $c.FilasPlan)) {
+            $enPlan = @(Get-FilasPlan $c | ForEach-Object { $_.Hallazgo })
+            foreach ($id in @([regex]::Matches((Remove-ComentariosHtml $prioridades), 'H-\d{3}') | ForEach-Object { $_.Value } | Sort-Object -Unique)) {
+                if ($enPlan -cnotcontains $id) { Write-Fallo 'C26' ("Prioridades de remediación: {0} no está en plan_remediacion.md." -f $id) }
+            }
+        }
+    } $c
+}
+
+# C27 — Resumen: leyenda, artículos verificados, Ley 21.719 con vigencia, Ley 21.459 como autorización, sin comandos ni IPs ajenas (FR-010, FR-011, FR-014, SC-005).
+$script:Comprobaciones += {
+    param($c)
+    if (-not $c.HayResumen) { return }
+    Invoke-Comprobacion 'C27' 'Resumen ejecutivo con citas legales y contenido permitidos' {
+        param($c)
+        $t = $c.TextoResumen
+        $normativa = Get-Seccion $t 'Implicancias normativas'
+        if ($null -ne $normativa) {
+            $normativa = Remove-ComentariosHtml $normativa
+            if ($normativa.IndexOf($script:LeyendaInforme) -lt 0) { Write-Fallo 'C27' ("Implicancias normativas: falta la leyenda '{0}'." -f $script:LeyendaInforme) }
+            $verificados = @(Get-FilasVerificacion $c | Where-Object { $_.Estado -ceq 'verificado' } | ForEach-Object { $_.Artículo })
+            # Heurística (research R5): "artículo X" o "art. X" con X numérico o un identificador en mayúsculas.
+            foreach ($m in [regex]::Matches($normativa, '(?i)\b(?:artículo|art\.)\s*((?-i)\d[\w°º.-]*|[A-Z][A-Z0-9-]+)')) {
+                $art = $m.Groups[1].Value.TrimEnd('.')
+                if ($verificados -cnotcontains $art) { Write-Fallo 'C27' ("Implicancias normativas: cita '{0}' sin fila 'verificado' en verificacion_articulos.md." -f $m.Value) }
+            }
+            $vigente = Test-VigenciaVerificada $c
+            foreach ($linea in ($normativa -split "`r?`n")) {
+                if (-not $vigente -and $linea -match '21\.719' -and $linea -notmatch 'vigencia') {
+                    Write-Fallo 'C27' ("Implicancias normativas: menciona la Ley 21.719 sin 'vigencia' y su entrada en vigor no está verificada: '{0}'." -f $linea.Trim())
+                }
+                if ($linea -match '21\.459' -and $linea -notmatch 'autorización') {
+                    Write-Fallo 'C27' ("Implicancias normativas: menciona la Ley 21.459 fuera del marco de la autorización: '{0}'." -f $linea.Trim())
+                }
+            }
+        }
+        if ($t.IndexOf($script:MarcaComando, [StringComparison]::OrdinalIgnoreCase) -ge 0) {
+            Write-Fallo 'C27' ("resumen_ejecutivo.md: contiene '{0}'; el resumen no lleva comandos." -f $script:MarcaComando)
+        }
+        Test-IpsAjenas 'C27' 'resumen_ejecutivo.md' $t
+    } $c
+}
+
+# C28 — Bloque Revisión del plan y del resumen (FR-015).
+$script:Comprobaciones += {
+    param($c)
+    if (-not $c.HayPlan -and -not $c.HayResumen) { return }
+    Invoke-Comprobacion 'C28' 'Bloque Revisión completo en el plan y el resumen' {
+        param($c)
+        $docs = @()
+        if ($c.HayPlan) { $docs += @{ Archivo = 'plan_remediacion.md'; Texto = $c.TextoPlan } }
+        if ($c.HayResumen) { $docs += @{ Archivo = 'resumen_ejecutivo.md'; Texto = $c.TextoResumen } }
+        foreach ($d in $docs) {
+            $rev = Get-Seccion $d.Texto 'Revisión'
+            if ($null -eq $rev) { Write-Fallo 'C28' ("{0}: falta la sección '## Revisión'." -f $d.Archivo); continue }
+            $meta = Get-Metadatos $rev
+            foreach ($clave in $script:MetadatosRevision) {
+                if (-not $meta.Contains($clave)) { Write-Fallo 'C28' ("{0}: falta la línea '{1}' del bloque Revisión." -f $d.Archivo, $clave) }
+            }
+            if (-not $meta.Contains('Estado')) { continue }
+            $estado = $meta['Estado']
+            if (-not (Test-Enum $estado $script:EstadosDocumento)) { Write-Fallo 'C28' ("{0}: estado de revisión '{1}' inválido." -f $d.Archivo, $estado); continue }
+            if ($estado -cne 'pendiente') {
+                if (-not $meta.Contains('Revisor') -or (Test-Vacio $meta['Revisor'])) { Write-Fallo 'C28' ("{0}: estado '{1}' sin revisor." -f $d.Archivo, $estado) }
+                if (-not $meta.Contains('Fecha') -or $meta['Fecha'] -notmatch '^\d{4}-\d{2}-\d{2}$') { Write-Fallo 'C28' ("{0}: estado '{1}' sin fecha AAAA-MM-DD." -f $d.Archivo, $estado) }
+            }
+        }
+    } $c
+}
+
+# C29 — Informe no cerrado: falta un documento o alguno está pendiente (FR-015, US3). Solo avisa.
+function Test-InformeCerrado($Ctx) {
+    $Ctx.HayPlan -and $Ctx.HayResumen -and
+        (Get-EstadoDocumento $Ctx.TextoPlan) -cin @('aprobado', 'corregido') -and
+        (Get-EstadoDocumento $Ctx.TextoResumen) -cin @('aprobado', 'corregido')
+}
+$script:Comprobaciones += {
+    param($c)
+    if (-not $c.HayPlan -and -not $c.HayResumen) { return }
+    if (-not $c.HayPlan) { Write-Aviso 'C29' 'Informe no cerrado: falta plan_remediacion.md.' }
+    elseif (-not $c.HayResumen) { Write-Aviso 'C29' 'Informe no cerrado: falta resumen_ejecutivo.md.' }
+    foreach ($d in @(@{ Archivo = 'plan_remediacion.md'; Texto = $c.TextoPlan }, @{ Archivo = 'resumen_ejecutivo.md'; Texto = $c.TextoResumen })) {
+        if ($null -ne $d.Texto -and (Get-EstadoDocumento $d.Texto) -ceq 'pendiente') {
+            Write-Aviso 'C29' ("Informe no cerrado: {0} está en revisión 'pendiente'." -f $d.Archivo)
+        }
+    }
+}
+
 # --- Ejecución ---
 
 Write-Output "Validando '$Ruta' (evidencias: '$Evidencias')"
@@ -949,6 +1265,16 @@ else {
         $cuenta = { param($e) @($filas | Where-Object { $_.Estado -ceq $e }).Count }
         Write-Output ("Mapeo: {0} de {1} hallazgos no descartados mapeados; referencias: {2} pendiente, {3} verificado, {4} descartado" -f `
             @(Get-HallazgosMapeados $contexto).Count, $noDescartados, (& $cuenta 'pendiente'), (& $cuenta 'verificado'), (& $cuenta 'descartado'))
+    }
+    if ($contexto.HayPlan -or $contexto.HayResumen) {
+        $plan = if ($contexto.HayPlan) {
+            $filas = @(Get-FilasPlan $contexto)
+            $cuenta = { param($e) @($filas | Where-Object { $_.Estado -ceq $e }).Count }
+            "plan con {0} entradas ({1} abierto, {2} en curso, {3} cerrado)" -f $filas.Count, (& $cuenta 'abierto'), (& $cuenta 'en curso'), (& $cuenta 'cerrado')
+        } else { 'sin plan' }
+        $resumen = if ($contexto.HayResumen) { "resumen con {0} palabras" -f (Get-PalabrasResumen $contexto.TextoResumen) } else { 'sin resumen' }
+        $estado = if (Test-InformeCerrado $contexto) { 'informe cerrado' } else { 'informe no cerrado' }
+        Write-Output ("Informe: {0}; {1}; {2}" -f $plan, $resumen, $estado)
     }
 }
 
