@@ -48,6 +48,8 @@ Evaluar la seguridad del activo de laboratorio mediante análisis de evidencia t
 
 Autorización escrita previa; red aislada y datos ficticios; ventana de pruebas definida; detención inmediata ante impacto inesperado. Claude **no** ejecuta escaneos/exploits: trabaja sobre evidencia entregada y, si se pide, *propone* comandos de verificación para que los ejecute el auditor.
 
+Detalle completo: [`reglas_compromiso.md`](reglas_compromiso.md). Plantilla de autorización escrita (Ley 21.459): [`plantillas/autorizacion_pruebas.md`](plantillas/autorizacion_pruebas.md); la copia firmada se guarda fuera del repositorio.
+
 ## Entregables
 
 Hallazgos individuales (`H-XXX.md`), matriz de hallazgos (`.csv`), inventario de activos y de evidencias, evidencia insuficiente, resumen ejecutivo y plan de remediación.
