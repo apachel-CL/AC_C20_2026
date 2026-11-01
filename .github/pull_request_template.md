@@ -13,6 +13,7 @@ Closes #
 - [x] Bloque Revisión actualizado en cada H-NNN.md tocado (estado, revisor, fecha)
 - [x] `scripts/Test-Salidas.ps1` termina sin errores y sin `[AVISO]` C11 pendientes
 - [x] Mapeo normativo revisado por el auditor en cada H-NNN.md tocado (Revisión vuelve a `pendiente` si cambió)
+- [x] Plan de remediación y resumen ejecutivo revisados por el auditor (Revisión vuelve a `pendiente` si se regeneraron con cambios)
 
 ## Estimación
 

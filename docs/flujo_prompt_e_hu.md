@@ -174,3 +174,72 @@ CIERRE (FR-017)
 - Resume lo mapeado, cuántas referencias quedan pendientes y las dudas y supuestos, en un
   bloque listo para pegar en la descripción del PR.
 ```
+
+---
+
+## 2d. Prompt de informe y remediación (funcionalidad 003)
+
+Se ejecuta al final, cuando hay hallazgos revisados por el auditor (Estado `aprobado` o
+`corregido`). Formatos: `specs/003-informe-remediacion/contracts/`.
+
+```text
+Actúa como auditor de ciberseguridad usando la skill sk-ciberauditor. Vas a consolidar los
+hallazgos ya revisados en el plan de remediación y el resumen ejecutivo. No analizas evidencias
+nuevas ni creas o modificas hallazgos, recomendaciones ni la matriz (FR-001).
+
+CONTEXTO
+- Lee ./docs/alcance.md, cada ./salidas/hallazgos/H-NNN.md, ./salidas/matriz_hallazgos.csv,
+  los inventarios, ./salidas/evidencia_insuficiente.md y, si existe,
+  ./salidas/verificacion_articulos.md.
+- Entran al informe solo los hallazgos con Estado "aprobado" o "corregido". Cuenta aparte los
+  "pendiente" y los "descartado".
+- Plantillas: ./docs/plantillas/plan_remediacion.md y ./docs/plantillas/resumen_ejecutivo.md.
+
+TAREA 1 — PLAN DE REMEDIACIÓN (salidas/plan_remediacion.md)
+1. Una fila por hallazgo revisado (FR-002). Copia de la matriz, sin reescribir: evidencias
+   (";" → "; "), severidad, prioridad, recomendacion → Acción, responsable_sugerido y
+   criterio_cierre (FR-003). Si una celda tendría "|", detente y pide al auditor que la
+   reescriba en el hallazgo y la matriz.
+2. Ordena por prioridad (P0 → P3), luego severidad (Crítica → Informativa), luego ID, y numera
+   Orden 1…n (FR-004).
+3. Plazo derivado de la prioridad: P0 "7 días", P1 "30 días", P2 "90 días", P3 "180 días"
+   (FR-005). Estado "abierto", Fecha y Evidencia de cierre "—", Comentario "—" (FR-006).
+   Si la acción se resuelve junto con otro hallazgo, dilo en el Comentario citando su ID.
+4. Completa los recuentos de hallazgos excluidos (FR-007).
+
+TAREA 2 — RESUMEN EJECUTIVO (salidas/resumen_ejecutivo.md)
+1. Las 7 secciones de la plantilla, en orden. Máximo 500 palabras antes de "## Revisión" (FR-008).
+2. Conteo por severidad igual a los hallazgos revisados de la matriz (FR-009).
+3. Riesgos principales: máximo 5, los de mayor prioridad, en lenguaje no técnico y cada uno con
+   su H-NNN; si hay más, remite al plan. Sin hallazgos revisados, dilo y no inventes riesgos.
+4. Prioridades de remediación: tomadas del plan, agrupadas por plazo, con sus H-NNN.
+5. Implicancias normativas (FR-011): incluye la leyenda "Mapeo orientativo; no constituye
+   dictamen jurídico". Cita artículos solo si su fila está "verificado". Mientras la fila
+   "entrada en vigor" no esté "verificado", la Ley 21.719 no se cita como obligación vigente y
+   toda línea que la mencione dice "vigencia". La Ley 21.459 solo como marco de la
+   autorización. Si la matriz no tiene columnas legales, omite la parte normativa y anótalo en
+   Limitaciones.
+6. Limitaciones: evidencia insuficiente, hallazgos pendientes de revisión y referencias legales
+   por verificar.
+
+REGLAS
+- Lenguaje no técnico en el resumen: sin comandos, puertos ni versiones salvo que sean
+  imprescindibles, y entonces explicados en una frase (FR-010).
+- Etiqueta [INFERENCIA] todo lo que no provenga de un hallazgo revisado o de una fuente
+  verificada (FR-012).
+- Enmascara credenciales, hashes, tokens, claves y datos personales (FR-013). El responsable es
+  un rol, nunca un nombre.
+- Los comandos del plan, si los hay, siguen marcados "propuesto: lo ejecuta el auditor" y
+  apuntan solo a 192.168.56.101. El resumen no lleva comandos. No ejecutes nada (FR-014).
+- REVISIÓN (FR-015, FR-016): ambos documentos quedan con Estado "pendiente". Si regeneras un
+  documento "aprobado" o "corregido" y su contenido cambia, pon Estado "pendiente", vacía
+  Revisor y Fecha y conserva el comentario anterior con el prefijo "Revisión previa:". No
+  cambies estados de remediación ni plazos: eso lo hace el auditor.
+
+CIERRE (FR-019)
+- Ejecuta el validador y corrige hasta que termine sin [ERROR]:
+  powershell -NoProfile -ExecutionPolicy Bypass -File scripts/Test-Salidas.ps1
+  El [AVISO] C29 indica que el informe aún no está cerrado (falta la revisión del auditor).
+- Resume lo generado, los hallazgos excluidos y las dudas y supuestos, en un bloque listo para
+  pegar en la descripción del PR.
+```

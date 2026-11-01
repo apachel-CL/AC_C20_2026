@@ -22,9 +22,9 @@ docs/
   plantillas/             Plantillas de inventarios, hallazgo (H-NNN.md) y matriz CSV
   referencias/            Material de referencia del curso
 evidencias/               Capturas y salidas de comandos (no se versionan: repo público)
-salidas/                  Inventarios, hallazgos, matriz, verificación de artículos, mapa normativo y resumen ejecutivo
+salidas/                  Inventarios, hallazgos, matriz, verificación de artículos, mapa normativo, plan de remediación y resumen ejecutivo
 scripts/
-  Test-Salidas.ps1        Validador de solo lectura de salidas/ (comprobaciones C1–C14)
+  Test-Salidas.ps1        Validador de solo lectura de salidas/ (comprobaciones C1–C29)
   tests/                  Runner Invoke-Pruebas.ps1 y fixtures ficticios del validador
 specs/                    Especificaciones Spec Kit (spec, plan, contratos, tareas)
 .github/                  Plantillas de issues y de pull request
@@ -44,6 +44,7 @@ Comprobaciones:
 
 - **C1–C14** (funcionalidad 001: inventarios, hallazgos, matriz, revisión y avisos): [specs/001-analisis-evidencias/contracts/test-salidas.md](specs/001-analisis-evidencias/contracts/test-salidas.md).
 - **C15–C22** (funcionalidad 002: mapeo normativo, `salidas/verificacion_articulos.md` y `salidas/mapa_normativo.md`): [specs/002-mapeo-normativo/contracts/test-salidas-002.md](specs/002-mapeo-normativo/contracts/test-salidas-002.md).
+- **C23–C29** (funcionalidad 003: `salidas/plan_remediacion.md` y `salidas/resumen_ejecutivo.md`; solo se ejecutan si existe alguno de los dos): [specs/003-informe-remediacion/contracts/test-salidas-003.md](specs/003-informe-remediacion/contracts/test-salidas-003.md).
 
 ## Gestión del trabajo
 
