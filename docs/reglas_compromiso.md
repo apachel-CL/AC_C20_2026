@@ -21,7 +21,7 @@ la prueba no empieza o se detiene.
 
 - Único activo: `192.168.56.101` (host `metasploitable`), según [`alcance.md`](alcance.md).
 - La red del laboratorio debe estar aislada: sin ruta a Internet ni a la red del hogar u
-  oficina. Modo previsto: host-only de VirtualBox *[INFERENCIA — confirmar en el issue #9]*.
+  oficina. Modo confirmado: host-only de VirtualBox (evidencia EV-019, issue #9).
 - Antes de cada sesión, el auditor confirma que la IP del objetivo es `192.168.56.101`. Si la
   IP cambió, se detiene y actualiza el alcance antes de seguir.
 - Todo tráfico dirigido a otra IP se considera fuera de alcance.
