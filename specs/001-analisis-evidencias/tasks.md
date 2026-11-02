@@ -121,7 +121,7 @@ procesar EV-002, `Test-Salidas.ps1` termina con 0 y se cumplen SC-001, SC-003 y 
 
 ### Ejecución del flujo en US1
 
-- [ ] T013 (#14) [US1] Procesar EV-002 con el prompt actualizado (T005) y la skill `sk-ciberauditor`, y generar `salidas/inventario_evidencias.md`, `salidas/inventario_activos.md` y `salidas/evidencia_insuficiente.md` a partir de las plantillas. Comprobar que `Test-Salidas.ps1` termina con 0, que EV-002 queda `contexto` sin hallazgos y que los siete datos coinciden con la captura (SC-003) [requiere evidencia del auditor: `evidencias/EV-002_ifconfig.<ext>`] [E3] [Talla: M | 3 pts]
+- [X] T013 (#14) [US1] Procesar EV-002 con el prompt actualizado (T005) y la skill `sk-ciberauditor`, y generar `salidas/inventario_evidencias.md`, `salidas/inventario_activos.md` y `salidas/evidencia_insuficiente.md` a partir de las plantillas. Comprobar que `Test-Salidas.ps1` termina con 0, que EV-002 queda `contexto` sin hallazgos y que los siete datos coinciden con la captura (SC-003) [requiere evidencia del auditor: `evidencias/EV-002_ifconfig.<ext>`] [E3] [Talla: M | 3 pts]
 
 **Checkpoint**: US1 funcional y validada; es el MVP entregable.
 
@@ -167,7 +167,7 @@ estado `pendiente`, una fila en la matriz y el validador en 0 (SC-002, SC-005, S
 
 ### Ejecución del flujo en US2
 
-- [ ] T020 (#16) [US2] Procesar la primera evidencia que muestre una debilidad. Generar `salidas/hallazgos/H-001.md` desde la plantilla, con estado `pendiente`, y su fila en `salidas/matriz_hallazgos.csv`. Registrar también en `salidas/inventario_activos.md` los datos del activo visibles en esa evidencia (FR-005, Q1). Etiquetar [INFERENCIA] lo que no sea visible y comprobar que `Test-Salidas.ps1` termina con 0 [requiere evidencia del auditor: `evidencias/EV-NNN_<tema>.<ext>`] [E3] [Talla: M | 3 pts]
+- [X] T020 (#16) [US2] Procesar la primera evidencia que muestre una debilidad. Generar `salidas/hallazgos/H-001.md` desde la plantilla, con estado `pendiente`, y su fila en `salidas/matriz_hallazgos.csv`. Registrar también en `salidas/inventario_activos.md` los datos del activo visibles en esa evidencia (FR-005, Q1). Etiquetar [INFERENCIA] lo que no sea visible y comprobar que `Test-Salidas.ps1` termina con 0 [requiere evidencia del auditor: `evidencias/EV-NNN_<tema>.<ext>`] [E3] [Talla: M | 3 pts]
 
 **Checkpoint**: US1 y US2 funcionan cada una por separado.
 
@@ -189,7 +189,7 @@ refleja (SC-005).
 
   [E3] [Talla: S | 2 pts]
 - [X] T022 (#38) [P] [US3] Crear el fixture `scripts/tests/fixtures/invalido-recomendacion-incompleta/` (falta el `Criterio de cierre`) y el fixture `scripts/tests/fixtures/aviso-prioridad-ajustada/` (prioridad distinta de la derivada; debe terminar con 0 y mostrar `[AVISO]`) [E3] [Talla: XS | 1 pts]
-- [ ] T023 (#39) [US3] Completar la sección Recomendación de cada `salidas/hallazgos/H-NNN.md`: exactamente una por hallazgo, con prioridad derivada de la severidad y comandos propuestos solo contra `192.168.56.101`, marcados "propuesto: lo ejecuta el auditor". Actualizar las columnas `recomendacion`, `prioridad`, `responsable_sugerido` y `criterio_cierre` de `salidas/matriz_hallazgos.csv` y comprobar que el validador termina con 0 [E3] [Talla: S | 2 pts]
+- [X] T023 (#39) [US3] Completar la sección Recomendación de cada `salidas/hallazgos/H-NNN.md`: exactamente una por hallazgo, con prioridad derivada de la severidad y comandos propuestos solo contra `192.168.56.101`, marcados "propuesto: lo ejecuta el auditor". Actualizar las columnas `recomendacion`, `prioridad`, `responsable_sugerido` y `criterio_cierre` de `salidas/matriz_hallazgos.csv` y comprobar que el validador termina con 0 [E3] [Talla: S | 2 pts]
 
 **Checkpoint**: la cadena Observación → Evidencia → Hallazgo → Recomendación queda completa.
 

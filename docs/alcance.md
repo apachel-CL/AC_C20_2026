@@ -26,7 +26,8 @@ Evaluar la seguridad del activo de laboratorio mediante análisis de evidencia t
 | Interfaz / MAC | `eth0` / `08:00:27:cd:02:f4` | EV-002 |
 | IPv4 | `192.168.56.101/24` (Bcast `192.168.56.255`) | EV-002 |
 | IPv6 | `fe80::a00:27ff:fecd:2f4/64` (Scope:Link) *[parcialmente legible]* | EV-002 |
-| Modo de red | Host-only VirtualBox *[INFERENCIA — confirmar]* | EV-002 |
+| Sistema operativo | Linux `2.6.24-16-server` i686 (kernel de 2008); distribución no registrada en la evidencia | EV-004 |
+| Modo de red | Host-only VirtualBox («VirtualBox Host-Only Ethernet Adapter») | EV-019 |
 | Propietario | *por definir* | — |
 
 ## Dentro del alcance
