@@ -115,7 +115,7 @@ justificación, y la matriz con `control_iso` y `controles_iso_adicionales` cohe
 
 ### Ejecución del flujo en US1
 
-- [ ] T010 [US1] Ejecutar el prompt §2c (parte ISO) sobre cada `salidas/hallazgos/H-NNN.md` no descartado: control principal, adicionales, anterior, motivo y justificación; actualizar `control_iso` y `controles_iso_adicionales` en `salidas/matriz_hallazgos.csv`; dejar la Revisión en `pendiente`. Comprobar que el validador termina con 0 (SC-001) [requiere hallazgos de 001] (#18) [E4] [Talla: S | 2 pts]
+- [X] T010 [US1] Ejecutar el prompt §2c (parte ISO) sobre cada `salidas/hallazgos/H-NNN.md` no descartado: control principal, adicionales, anterior, motivo y justificación; actualizar `control_iso` y `controles_iso_adicionales` en `salidas/matriz_hallazgos.csv`; dejar la Revisión en `pendiente`. Comprobar que el validador termina con 0 (SC-001) [requiere hallazgos de 001] (#18) [E4] [Talla: S | 2 pts]
 
 **Checkpoint**: US1 funcional y validada; es el MVP entregable ("Mapa ISO 27001").
 
@@ -141,7 +141,7 @@ mapeado tiene la frase hipotética de Q1 y el validador termina con 0 (SC-002, S
 
 ### Ejecución del flujo en US2
 
-- [ ] T014 [US2] Ejecutar el prompt §2c (parte legal) sobre cada hallazgo mapeado en US1: obligaciones 21.663 y 21.719 con certeza, justificación [INFERENCIA] y artículos en `verificar`; actualizar las columnas `ley_21663_*` y `ley_21719_*` de la matriz; Revisión en `pendiente`. Comprobar que el validador termina con 0 (SC-002) [requiere hallazgos de 001] (#19, #20) [E4] [Talla: S | 2 pts]
+- [X] T014 [US2] Ejecutar el prompt §2c (parte legal) sobre cada hallazgo mapeado en US1: obligaciones 21.663 y 21.719 con certeza, justificación [INFERENCIA] y artículos en `verificar`; actualizar las columnas `ley_21663_*` y `ley_21719_*` de la matriz; Revisión en `pendiente`. Comprobar que el validador termina con 0 (SC-002) [requiere hallazgos de 001] (#19, #20) [E4] [Talla: S | 2 pts]
 
 **Checkpoint**: US1 y US2 funcionan; cada hallazgo tiene mapeo ISO y legal.
 
@@ -179,7 +179,7 @@ verificarse y un mapa normativo coherente con los hallazgos.
 
 ### Ejecución del flujo en US3
 
-- [ ] T020 [US3] Generar `salidas/verificacion_articulos.md` y `salidas/mapa_normativo.md` desde las plantillas, con una fila `pendiente` por referencia legal de los hallazgos mapeados y la fila `entrada en vigor` si corresponde. Comprobar que el validador termina con 0 y `[AVISO]` C22 [requiere hallazgos de 001] (#21) [E4] [Talla: S | 2 pts]
+- [X] T020 [US3] Generar `salidas/verificacion_articulos.md` y `salidas/mapa_normativo.md` desde las plantillas, con una fila `pendiente` por referencia legal de los hallazgos mapeados y la fila `entrada en vigor` si corresponde. Comprobar que el validador termina con 0 y `[AVISO]` C22 [requiere hallazgos de 001] (#21) [E4] [Talla: S | 2 pts]
 
 **Checkpoint**: la cadena se extiende a Hallazgo → Mapeo normativo → Verificación, y el mapa
 lleva de vuelta a la evidencia.
