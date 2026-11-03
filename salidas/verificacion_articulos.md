@@ -1,19 +1,29 @@
 # Verificación de artículos
 
 > Mapeo orientativo; no constituye dictamen jurídico. Solo el auditor cambia el estado,
-> tras consultar la fuente oficial.
+> tras consultar la fuente oficial. Esta verificación la hizo Claude por encargo expreso del
+> auditor, que la confirma en su revisión.
 
 | ID | Hallazgo | Ley | Obligación | Artículo | Estado | Fuente | Fecha | Comentario |
 |---|---|---|---|---|---|---|---|---|
-| VA-001 | — | 21.719 | entrada en vigor | verificar | pendiente | | | Informado por el auditor el 2026-11-02: aún no vigente; entrada en vigor planificada para 2026-12-01; un proyecto de ley en discusión propone postergarla un año. Faltan artículo o disposición y fuente oficial. |
-| VA-002 | H-001 | 21.663 | medidas de seguridad | verificar | pendiente | | | |
-| VA-003 | H-002 | 21.663 | gestión de riesgos | verificar | pendiente | | | |
-| VA-004 | H-003 | 21.663 | medidas de seguridad | verificar | pendiente | | | |
-| VA-005 | H-004 | 21.663 | medidas de seguridad | verificar | pendiente | | | |
-| VA-006 | H-005 | 21.663 | medidas de seguridad | verificar | pendiente | | | |
-| VA-007 | H-006 | 21.663 | gestión de riesgos | verificar | pendiente | | | |
-| VA-008 | H-007 | 21.663 | gestión de riesgos | verificar | pendiente | | | |
-| VA-009 | H-008 | 21.663 | medidas de seguridad | verificar | pendiente | | | |
-| VA-010 | H-009 | 21.663 | medidas de seguridad | verificar | pendiente | | | |
-| VA-011 | H-010 | 21.663 | medidas de seguridad | verificar | pendiente | | | |
-| VA-012 | H-011 | 21.663 | medidas de seguridad | verificar | pendiente | | | |
+| VA-001 | — | 21.719 | entrada en vigor | Artículo primero transitorio | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Vigencia desde 2026-12-01 (cálculo: día primero del mes 24 posterior a la publicación del 2024-12-13). El Boletín 18623-07 propone postergarla: al 2026-11-02 está en segundo trámite en la Cámara, con discusión inmediata, y no es ley. Revisar antes de emitir el informe. Consulta de Claude autorizada por el auditor. |
+| VA-002 | H-001 | 21.663 | medidas de seguridad | Artículo 7 | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Consulta de Claude autorizada por el auditor. |
+| VA-003 | H-002 | 21.663 | gestión de riesgos | Artículo 8 letra a) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Deber de los operadores de importancia vital: aplica solo bajo esa hipótesis. Consulta de Claude autorizada por el auditor. |
+| VA-004 | H-003 | 21.663 | medidas de seguridad | Artículo 7 | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Consulta de Claude autorizada por el auditor. |
+| VA-005 | H-004 | 21.663 | medidas de seguridad | Artículo 7 | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Consulta de Claude autorizada por el auditor. |
+| VA-006 | H-005 | 21.663 | medidas de seguridad | Artículo 7 | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Consulta de Claude autorizada por el auditor. |
+| VA-007 | H-006 | 21.663 | gestión de riesgos | Artículo 8 letra a) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Deber de los operadores de importancia vital: aplica solo bajo esa hipótesis. Consulta de Claude autorizada por el auditor. |
+| VA-008 | H-007 | 21.663 | gestión de riesgos | Artículo 8 letra a) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Deber de los operadores de importancia vital: aplica solo bajo esa hipótesis. Consulta de Claude autorizada por el auditor. |
+| VA-009 | H-008 | 21.663 | medidas de seguridad | Artículo 7 | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Consulta de Claude autorizada por el auditor. |
+| VA-010 | H-009 | 21.663 | medidas de seguridad | Artículo 7 | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Consulta de Claude autorizada por el auditor. |
+| VA-011 | H-010 | 21.663 | medidas de seguridad | Artículo 7 | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Consulta de Claude autorizada por el auditor. |
+| VA-012 | H-011 | 21.663 | medidas de seguridad | Artículo 7 | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1202434 | 2026-11-02 | Consulta de Claude autorizada por el auditor. |
+| VA-013 | H-001 | 21.719 | deber de adoptar medidas de seguridad | Artículo 14 quinquies de la Ley 19.628 (texto de la Ley 21.719) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Deber del responsable de datos, exigible desde la entrada en vigor (VA-001). Consulta de Claude autorizada por el auditor. |
+| VA-014 | H-002 | 21.719 | deber de adoptar medidas de seguridad | Artículo 14 quinquies de la Ley 19.628 (texto de la Ley 21.719) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Deber del responsable de datos, exigible desde la entrada en vigor (VA-001). Consulta de Claude autorizada por el auditor. |
+| VA-015 | H-003 | 21.719 | deber de adoptar medidas de seguridad | Artículo 14 quinquies de la Ley 19.628 (texto de la Ley 21.719) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Deber del responsable de datos, exigible desde la entrada en vigor (VA-001). Consulta de Claude autorizada por el auditor. |
+| VA-016 | H-004 | 21.719 | deber de adoptar medidas de seguridad | Artículo 14 quinquies de la Ley 19.628 (texto de la Ley 21.719) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Deber del responsable de datos, exigible desde la entrada en vigor (VA-001). Consulta de Claude autorizada por el auditor. |
+| VA-017 | H-007 | 21.719 | deber de adoptar medidas de seguridad | Artículo 14 quinquies de la Ley 19.628 (texto de la Ley 21.719) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Deber del responsable de datos, exigible desde la entrada en vigor (VA-001). Consulta de Claude autorizada por el auditor. |
+| VA-018 | H-008 | 21.719 | deber de adoptar medidas de seguridad | Artículo 14 quinquies de la Ley 19.628 (texto de la Ley 21.719) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Deber del responsable de datos, exigible desde la entrada en vigor (VA-001). Consulta de Claude autorizada por el auditor. |
+| VA-019 | H-009 | 21.719 | deber de adoptar medidas de seguridad | Artículo 14 quinquies de la Ley 19.628 (texto de la Ley 21.719) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Deber del responsable de datos, exigible desde la entrada en vigor (VA-001). Consulta de Claude autorizada por el auditor. |
+| VA-020 | H-010 | 21.719 | deber de adoptar medidas de seguridad | Artículo 14 quinquies de la Ley 19.628 (texto de la Ley 21.719) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Deber del responsable de datos, exigible desde la entrada en vigor (VA-001). Consulta de Claude autorizada por el auditor. |
+| VA-021 | H-011 | 21.719 | deber de adoptar medidas de seguridad | Artículo 14 quinquies de la Ley 19.628 (texto de la Ley 21.719) | verificado | https://www.bcn.cl/leychile/navegar?idNorma=1209272 | 2026-11-02 | Deber del responsable de datos, exigible desde la entrada en vigor (VA-001). Consulta de Claude autorizada por el auditor. |
