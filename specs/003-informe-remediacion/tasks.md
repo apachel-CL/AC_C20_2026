@@ -114,7 +114,7 @@ termina con 0.
 
 ### Ejecución del flujo en US1
 
-- [ ] T010 [US1] Ejecutar el prompt §2d (parte plan) y generar `salidas/plan_remediacion.md` con una fila por hallazgo revisado, plazo derivado, estado `abierto`, recuento de excluidos y Revisión `pendiente`. Comprobar que el validador termina con 0 (SC-001, SC-002) [requiere hallazgos revisados] (#24) [E5] [Talla: S | 2 pts]
+- [X] T010 [US1] Ejecutar el prompt §2d (parte plan) y generar `salidas/plan_remediacion.md` con una fila por hallazgo revisado, plazo derivado, estado `abierto`, recuento de excluidos y Revisión `pendiente`. Comprobar que el validador termina con 0 (SC-001, SC-002) [requiere hallazgos revisados] (#24) [E5] [Talla: S | 2 pts]
 
 **Checkpoint**: US1 funcional y validada; es el MVP entregable ("Plan de remediación").
 
@@ -145,7 +145,7 @@ hallazgo existente (SC-003, SC-004, SC-005).
 
 ### Ejecución del flujo en US2
 
-- [ ] T014 [US2] Ejecutar el prompt §2d (parte resumen) y generar `salidas/resumen_ejecutivo.md` desde la plantilla, con conteos de la matriz, riesgos con su hallazgo, prioridades del plan, implicancias normativas orientativas y limitaciones; Revisión `pendiente`. Comprobar que el validador termina con 0 y `[AVISO]` C29 [requiere hallazgos revisados] (#23) [E5] [Talla: S | 2 pts]
+- [X] T014 [US2] Ejecutar el prompt §2d (parte resumen) y generar `salidas/resumen_ejecutivo.md` desde la plantilla, con conteos de la matriz, riesgos con su hallazgo, prioridades del plan, implicancias normativas orientativas y limitaciones; Revisión `pendiente`. Comprobar que el validador termina con 0 y `[AVISO]` C29 [requiere hallazgos revisados] (#23) [E5] [Talla: S | 2 pts]
 
 **Checkpoint**: US1 y US2 funcionan; el informe tiene plan y resumen trazables a los hallazgos.
 
@@ -171,7 +171,7 @@ cerrado.
 
 ### Ejecución del flujo en US3
 
-- [ ] T017 [US3] Revisión humana: el auditor revisa `salidas/plan_remediacion.md` y `salidas/resumen_ejecutivo.md` (lenguaje no técnico, [INFERENCIA], enmascaramiento, plazos), ajusta plazos con `Plazo ajustado:` si corresponde, completa ambos bloques Revisión y mide la lectura del resumen por una persona no técnica (SC-003, < 3 min). Abrir el PR contra `main` con el checklist de la DoD y `Closes #23`, `Closes #24` [requiere al auditor] [requiere hallazgos revisados] (#23, #24) [E5] [Talla: S | 2 pts]
+- [X] T017 [US3] Revisión humana: el auditor revisa `salidas/plan_remediacion.md` y `salidas/resumen_ejecutivo.md` (lenguaje no técnico, [INFERENCIA], enmascaramiento, plazos), ajusta plazos con `Plazo ajustado:` si corresponde, completa ambos bloques Revisión y mide la lectura del resumen por una persona no técnica (SC-003, < 3 min). Abrir el PR contra `main` con el checklist de la DoD y `Closes #23`, `Closes #24` [requiere al auditor] [requiere hallazgos revisados] (#23, #24) [E5] [Talla: S | 2 pts]
 
 **Checkpoint**: el informe queda cerrado con revisión humana; la cadena llega de la evidencia
 al plan y al resumen.
@@ -183,7 +183,7 @@ al plan y al resumen.
 **Purpose**: documentación y medición.
 
 - [X] T018 [P] Actualizar la sección de validación de `README.md` con C23–C29 y los dos archivos nuevos de `salidas/`, y agregar en `specs/001-analisis-evidencias/contracts/test-salidas.md` una nota que remita a `specs/003-informe-remediacion/contracts/test-salidas-003.md` [E5] [Talla: XS | 1 pts]
-- [ ] T019 Ejecutar los escenarios 0 y 4 de `specs/003-informe-remediacion/quickstart.md` (y 1–3 si hay hallazgos revisados). Medir con `Measure-Command` el validador sobre `salidas/` y sobre `scripts/tests/fixtures/valido/` (meta < 5 s). Pegar el resultado, dudas y supuestos en la descripción del PR (FR-019) [E5] [Talla: S | 2 pts]
+- [X] T019 Ejecutar los escenarios 0 y 4 de `specs/003-informe-remediacion/quickstart.md` (y 1–3 si hay hallazgos revisados). Medir con `Measure-Command` el validador sobre `salidas/` y sobre `scripts/tests/fixtures/valido/` (meta < 5 s). Pegar el resultado, dudas y supuestos en la descripción del PR (FR-019) [E5] [Talla: S | 2 pts]
 
 ---
 
