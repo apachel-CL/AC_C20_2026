@@ -56,7 +56,7 @@ La Ley 21.459 solo enmarca la autorización de las pruebas.
 
 ## Revisión
 
-- **Estado**: pendiente
-- **Revisor**:
-- **Fecha**:
-- **Comentario**:
+- **Estado**: aprobado
+- **Revisor**: Auditor líder
+- **Fecha**: 2026-11-02
+- **Comentario**: Aprobado sin cambios; lectura de una persona no técnica: 2 minutos (SC-003)

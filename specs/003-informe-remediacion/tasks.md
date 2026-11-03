@@ -171,7 +171,7 @@ cerrado.
 
 ### Ejecución del flujo en US3
 
-- [ ] T017 [US3] Revisión humana: el auditor revisa `salidas/plan_remediacion.md` y `salidas/resumen_ejecutivo.md` (lenguaje no técnico, [INFERENCIA], enmascaramiento, plazos), ajusta plazos con `Plazo ajustado:` si corresponde, completa ambos bloques Revisión y mide la lectura del resumen por una persona no técnica (SC-003, < 3 min). Abrir el PR contra `main` con el checklist de la DoD y `Closes #23`, `Closes #24` [requiere al auditor] [requiere hallazgos revisados] (#23, #24) [E5] [Talla: S | 2 pts]
+- [X] T017 [US3] Revisión humana: el auditor revisa `salidas/plan_remediacion.md` y `salidas/resumen_ejecutivo.md` (lenguaje no técnico, [INFERENCIA], enmascaramiento, plazos), ajusta plazos con `Plazo ajustado:` si corresponde, completa ambos bloques Revisión y mide la lectura del resumen por una persona no técnica (SC-003, < 3 min). Abrir el PR contra `main` con el checklist de la DoD y `Closes #23`, `Closes #24` [requiere al auditor] [requiere hallazgos revisados] (#23, #24) [E5] [Talla: S | 2 pts]
 
 **Checkpoint**: el informe queda cerrado con revisión humana; la cadena llega de la evidencia
 al plan y al resumen.

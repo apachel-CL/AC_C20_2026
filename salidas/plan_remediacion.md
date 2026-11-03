@@ -22,7 +22,7 @@
 
 ## Revisión
 
-- **Estado**: pendiente
-- **Revisor**:
-- **Fecha**:
-- **Comentario**:
+- **Estado**: aprobado
+- **Revisor**: Auditor líder
+- **Fecha**: 2026-11-02
+- **Comentario**: Aprobado sin cambios
