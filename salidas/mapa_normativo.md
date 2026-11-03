@@ -27,6 +27,7 @@
 
 | Obligación Ley 21.719 | Hallazgos |
 |---|---|
+| deber de adoptar medidas de seguridad | H-001; H-002; H-003; H-004; H-007; H-008; H-009; H-010; H-011 |
 
 ## Ley 21.459
 
