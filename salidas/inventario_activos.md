@@ -20,3 +20,11 @@
 | metasploitable | otro | SSH: OpenSSH_4.7p1 Debian-8ubuntu1 | [HECHO] | EV-012 |
 | metasploitable | otro | SMTP: ESMTP Postfix (Ubuntu) | [HECHO] | EV-014 |
 | metasploitable | otro | La red no tiene ruta a Internet | [INFERENCIA] | EV-001 |
+| metasploitable | otro | 30 puertos TCP abiertos (escaneo en vivo desde WSL) | [HECHO] | EV-021 |
+| metasploitable | otro | OS: Unix (Samba 3.0.20-Debian); FQDN metasploitable.localdomain | [HECHO] | EV-022 |
+| metasploitable | otro | NFS exporta la raíz `/` a todos los hosts (`/ *`) | [HECHO] | EV-023 |
+| metasploitable | otro | SMB: recursos `tmp` e `IPC$` con acceso anónimo lectura/escritura; SMBv1 habilitado | [HECHO] | EV-023 |
+| metasploitable | otro | Web: Apache/2.2.8 (Ubuntu) DAV/2, PHP/5.2.4-2ubuntu5.10 | [HECHO] | EV-024 |
+| metasploitable | otro | Apache Tomcat/5.5 (8180/tcp) y conector AJP13 (8009/tcp) | [HECHO] | EV-022 |
+| metasploitable | otro | DNS: ISC BIND 9.4.2 (53/tcp) | [HECHO] | EV-022 |
+| metasploitable | otro | FTP secundario: ProFTPD 1.3.1 (2121/tcp) | [HECHO] | EV-022 |

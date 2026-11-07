@@ -2,7 +2,7 @@
 
 ## Objetivo y alcance
 
-Se evaluó un equipo de laboratorio aislado (192.168.56.101), sin datos reales, a partir de evidencia técnica ya capturada. Los resultados se contrastaron con ISO/IEC 27001:2022 y con las leyes chilenas de ciberseguridad y de datos personales. No se intentó explotar ninguna debilidad.
+Se evaluó un equipo de laboratorio aislado (192.168.56.101), sin datos reales. En el ciclo en vivo (004) el reconocimiento se ejecutó desde WSL el 7 de noviembre de 2026, solo con escaneo y enumeración; no se intentó explotar ninguna debilidad. Los resultados se contrastaron con ISO/IEC 27001:2022 y con las leyes chilenas de ciberseguridad y de datos personales.
 
 ## Resultados por severidad
 
@@ -43,20 +43,17 @@ Cada hallazgo se asoció a un control de ISO/IEC 27001:2022.
 
 [INFERENCIA] Si el equipo tratara datos personales, nueve hallazgos se relacionarían con el deber de adoptar medidas de seguridad de la Ley 21.719.
 
-La Ley 21.719 aún no tiene vigencia: rige desde el 1 de diciembre de 2026, según sus disposiciones transitorias. El Boletín 18623-07, en trámite al 2 de noviembre de 2026, propone postergarla; este dato debe actualizarse antes de difundir el informe. Los artículos están en `verificacion_articulos.md`.
-
-La Ley 21.459 solo enmarca la autorización de las pruebas.
+La Ley 21.719 aún no tiene vigencia: rige desde el 1 de diciembre de 2026. El Boletín 18623-07, en trámite al 7 de noviembre de 2026, propone postergarla; actualizar antes de difundir. Los artículos están en `verificacion_articulos.md`. La Ley 21.459 solo enmarca la autorización de las pruebas.
 
 ## Limitaciones
 
-- Dieciséis de las 19 evidencias se rescataron de un reporte previo; no son los archivos originales.
-- Varias conclusiones se deducen de lo que cada servicio declara: no se comprobaron conexiones ni se confirmó que las debilidades sean explotables.
-- La autorización se registró el 2 de noviembre de 2026, después de los escaneos de octubre, y el propietario del activo sigue por definir.
-- No hay hallazgos pendientes de revisión ni evidencia insuficiente registrada. Las referencias legales se consultaron en la fuente oficial por encargo del auditor.
+- El ciclo en vivo (004) sumó siete evidencias de primera mano (EV-020–EV-026) capturadas desde WSL; corroboran los hallazgos aprobados y aportan tres nuevos, aún en revisión del auditor.
+- Las evidencias EV-003 a EV-019 se rescataron de un reporte previo y no son los archivos originales.
+- Varias conclusiones se deducen de lo que cada servicio declara: no se confirmó que las debilidades sean explotables. El propietario del activo sigue por definir.
 
 ## Revisión
 
-- **Estado**: aprobado
-- **Revisor**: Auditor líder
-- **Fecha**: 2026-11-02
-- **Comentario**: Aprobado sin cambios; lectura de una persona no técnica: 2 minutos (SC-003)
+- **Estado**: pendiente
+- **Revisor**:
+- **Fecha**:
+- **Comentario**: Reabierto en el ciclo 004 (auditoría en vivo); se cerrará tras revisar los hallazgos nuevos.

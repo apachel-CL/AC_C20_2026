@@ -3,8 +3,11 @@
 > Generado a partir de los hallazgos revisados (aprobado o corregido). Los comandos, si los
 > hay, son propuestos y los ejecuta el auditor solo contra 192.168.56.101.
 
-- **Hallazgos excluidos (pendiente)**: 0
+- **Hallazgos excluidos (pendiente)**: 3
 - **Hallazgos excluidos (descartado)**: 0
+
+> Excluidos por estar en revisión `pendiente`: H-012, H-013, H-014 (hallazgos nuevos del ciclo en
+> vivo 004). Se incorporarán al plan cuando el auditor los apruebe.
 
 | Orden | Hallazgo | Evidencias | Severidad | Prioridad | Acción | Responsable sugerido | Plazo | Criterio de cierre | Estado | Fecha de cierre | Evidencia de cierre | Comentario |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
@@ -22,7 +25,7 @@
 
 ## Revisión
 
-- **Estado**: aprobado
-- **Revisor**: Auditor líder
-- **Fecha**: 2026-11-02
-- **Comentario**: Aprobado sin cambios
+- **Estado**: pendiente
+- **Revisor**:
+- **Fecha**:
+- **Comentario**: Reabierto en el ciclo 004 (auditoría en vivo). Las 11 filas aprobadas el 2026-11-02 no cambian; falta revisar los hallazgos nuevos H-012, H-013 y H-014 antes de cerrar.
